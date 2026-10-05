@@ -5,7 +5,7 @@ const TUT = [
   { h: '끝말잇기로 이어요', p: '낱말이 터지면 그 끝 글자가 "이을 글자"로 떠요. 그 글자로 시작하는 낱말을 이어서 만들면 점수가 점점 커져요. (가방 → 방학 → 학교) 끊겨도 괜찮아요, 새로 이어가면 돼요.', art: '<span class="mini w">가방</span><span class="op">→</span><span class="mini w">방학</span><span class="op">→</span><span class="mini w">학교</span>' },
   { h: '한 글자 낱말은 잠깐 기다려요', p: '약, 눈, 봄 같은 한 글자 낱말은 노란 테두리로 잠깐 기다려 줘요. 짝 글자를 만나면 약+사 = 약사처럼 두 글자 낱말이 되고, 공을 누르면 바로 터져요.', art: '<span class="mini f ripe">약</span><span class="op">+</span><span class="mini s">사</span><span class="op">→</span><span class="mini w">약사</span>' },
   { h: '사전에 있는 낱말은 다 돼요', p: '표준국어대사전의 두 글자 명사라면 무엇이든 터져요. 되는 낱말인지는 도감의 "사전"에서 찾아봐요.', art: '<span class="mini s">반</span><span class="op">+</span><span class="mini s">석</span><span class="op">→</span><span class="mini w">반석</span>' },
-  { h: '점선을 넘으면 끝이에요', p: '공이 점선 위까지 쌓이면 끝나요. 막힐 땐 아래 지우개·폭죽·자석을 써요. 아이템은 낱말 세 개마다 하나씩 생겨요.', art: '<span class="mini c">ㅂ</span><span class="mini v">ㅏ</span><span class="mini s">바</span><span class="cap">점선 위로 쌓이면 끝!</span>' },
+  { h: '점선을 넘으면 끝이에요', p: '공이 점선 위까지 쌓이면 끝나요. 막힐 땐 아래 지우개·폭죽·가위를 써요. 아이템은 낱말 세 개마다 하나씩 생겨요.', art: '<span class="mini c">ㅂ</span><span class="mini v">ㅏ</span><span class="mini s">바</span><span class="cap">점선 위로 쌓이면 끝!</span>' },
 ];
 if (!ENABLE_SINGLES) { const i = TUT.findIndex(t => t.h.startsWith('한 글자')); if (i >= 0) TUT.splice(i, 1); }
 if (!ENABLE_RELAY) { const i = TUT.findIndex(t => t.h.startsWith('끝말잇기')); if (i >= 0) TUT.splice(i, 1); }

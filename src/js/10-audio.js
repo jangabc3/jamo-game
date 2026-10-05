@@ -58,6 +58,7 @@ function sfx(kind, v) {
     if (c >= 3) { note(scaleNote(o + 9), .5, .07, .3, { bell: true }); note(scaleNote(o + 7), .5, .06, .36, { bell: true }); }
   }
   if (kind === 'chain') { const c = Math.min(v, 9); for (let i = 0; i < 3; i++) note(scaleNote(c + i * 2), .26, .1, i * .05, { bell: true }); puff(.1, .04, 6000, 2500); }
+  if (kind === 'snip') { puff(.05, .09, 6500, 2200); puff(.05, .08, 5200, 1800, .09); note(880, .08, .05, 0, { type: 'triangle', slide: .7 }); note(1180, .08, .05, .09, { type: 'triangle', slide: .7 }); }
   if (kind === 'erase') { note(520, .22, .1, 0, { type: 'triangle', slide: .4 }); puff(.12, .05, 4000, 800); }
   if (kind === 'bomb') { note(120, .45, .22, 0, { type: 'triangle', slide: .35 }); puff(.5, .22, 1800, 200); }
   if (kind === 'item') { note(scaleNote(5), .16, .12, 0, { bell: true }); note(scaleNote(8), .28, .12, .08, { bell: true }); }

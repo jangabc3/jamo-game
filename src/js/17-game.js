@@ -6,12 +6,12 @@ function startGame(mode) {
   G.mode = mode; loadBest();
   initWorld();
   const base = { score: 0, combo: 0, lastPop: 0, wordsMade: 0, topWord: null, topPts: 0, ready: true, playing: true, over: false, overT: 0, paused: false,
-    items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9, foundNow: [], cont: 1, cm: 0, seen: {}, hintRare: false, target: null,
+    items: { eraser: 1, bomb: 1, wild: 1, scissors: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9, foundNow: [], cont: 1, cm: 0, seen: {}, hintRare: false, target: null,
     danger: DANGER0, lastDrop: G.now, nextGrow: G.now + 3500, slowUntil: 0, freezeUntil: 0, bump: null, banner: null, quietT: 0, recordHit: false, startBest: G.best, seq: [], dailyT: [], dailyDone: [], easy: (+store.get('jamo-plays', '0') || 0) < 2, lastWord: null, need: null, relay: 0, maxRelay: 0, relayFlash: 0, maxChain: 0, maxCombo: 0, chain: 0, chainT: 0, next2: null };
   Object.assign(G, base);
   $('vig').className = ''; rkIdx = 0; updateRank(false);
   shownScore = 0; $('score').textContent = 0; $('scoreL').textContent = '점수';
-  G.fx = { parts: [], rings: [], floats: [], fly: [] };
+  G.fx = { parts: [], rings: [], floats: [], fly: [], cuts: [], links: [] };
   if (mode === 'daily') {
     const d = buildDaily(vsKey());
     G.dailyT = d.targets; G.dailyDone = d.targets.map(() => false); G.seq = d.seq;

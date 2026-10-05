@@ -94,28 +94,23 @@ function draw(t) {
   rr(JL - 11, JT - 18, JR - JL + 22, JB - JT + 29, 20);
   ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
 
-  // 자석 필드
-  // 자석: 회색으로 덮지 않고, 양쪽 벽이 빨강·파랑으로 은은하게 빛나고 끌리는 짝 사이에 자기장 선이 흘러요
-  if (t < G.magnetUntil && G.playing) {
-    const left = G.magnetUntil - t, fade = Math.min(1, left / 500) * Math.min(1, (4500 - left) / 250), pu = .7 + .3 * Math.sin(t / 140);
-    ctx.save(); ctx.globalAlpha = fade;
-    let gr = ctx.createLinearGradient(JL, 0, JL + 46, 0); gr.addColorStop(0, `rgba(219,111,92,${.32 * pu})`); gr.addColorStop(1, 'rgba(219,111,92,0)');
-    ctx.fillStyle = gr; ctx.fillRect(JL, JT, 46, JB - JT);
-    gr = ctx.createLinearGradient(JR, 0, JR - 46, 0); gr.addColorStop(0, `rgba(108,156,196,${.34 * pu})`); gr.addColorStop(1, 'rgba(108,156,196,0)');
-    ctx.fillStyle = gr; ctx.fillRect(JR - 46, JT, 46, JB - JT);
-    ctx.lineWidth = 2.4; ctx.lineCap = 'round';
-    for (const [a, b] of G.magPairs || []) {
-      if (a.g.dead || b.g.dead) continue;
-      const ax = a.position.x, ay = a.position.y, bx = b.position.x, by = b.position.y, mx = (ax + bx) / 2, my = (ay + by) / 2 - Math.min(40, Math.hypot(bx - ax, by - ay) * .25);
-      for (const [col, off] of [['#DB6F5C', 0], ['#6C9CC4', 7]]) {
-        ctx.setLineDash([7, 7]); ctx.lineDashOffset = -t / 28 + off; ctx.strokeStyle = col; ctx.globalAlpha = fade * .75;
-        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
-      }
-    }
+  // 효과
+  // 가위: 공이 있던 자리를 날이 사선으로 싹 지나가요
+  G.fx.cuts = (G.fx.cuts || []).filter(f => t - f.t < 320);
+  for (const f of G.fx.cuts) {
+    const k = (t - f.t) / 320, len = f.r * 2.6, ca = Math.cos(f.a), sa = Math.sin(f.a), sweep = -len / 2 + len * Math.min(1, k * 1.8);
+    ctx.save(); ctx.globalAlpha = 1 - k; ctx.lineCap = 'round';
+    ctx.lineWidth = 7; ctx.strokeStyle = '#FAF4E4'; ctx.beginPath(); ctx.moveTo(f.x - ca * len / 2, f.y - sa * len / 2); ctx.lineTo(f.x + ca * sweep, f.y + sa * sweep); ctx.stroke();
+    ctx.lineWidth = 2.4; ctx.strokeStyle = INK; ctx.stroke(); ctx.restore();
+  }
+  // 자석(숨은 낱말): 끌려가는 짝 사이에 빨강·파랑 선이 잠깐 번쩍여요
+  G.fx.links = (G.fx.links || []).filter(f => t - f.t < 520);
+  for (const f of G.fx.links) {
+    if (f.a.g.dead || f.b.g.dead) continue;
+    const k = (t - f.t) / 520; ctx.save(); ctx.globalAlpha = (1 - k) * .9; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.setLineDash([6, 6]);
+    for (const [col, off] of [['#DB6F5C', 0], ['#6C9CC4', 6]]) { ctx.lineDashOffset = -t / 30 + off; ctx.strokeStyle = col; ctx.beginPath(); ctx.moveTo(f.a.position.x, f.a.position.y); ctx.lineTo(f.b.position.x, f.b.position.y); ctx.stroke(); }
     ctx.restore();
   }
-
-  // 효과
   G.fx.rings = G.fx.rings.filter(f => t - f.t < 420);
   for (const f of G.fx.rings) { const k = (t - f.t) / 420; ctx.save(); ctx.globalAlpha = 1 - k; ctx.lineWidth = 6 * (1 - k) + 1; ctx.strokeStyle = f.color; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (.6 + k * 1.1), 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
   G.fx.fly = G.fx.fly.filter(f => t - f.t < f.dur + 40);

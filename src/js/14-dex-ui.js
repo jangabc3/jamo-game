@@ -72,7 +72,8 @@ function paintLevel() {
 }
 function paintGrades() {
   const lv = dexLevel(), list = $('gradeList'); list.innerHTML = '';
-  GRADES.forEach((g, k) => {
+  // 위에서부터 명인 → 9급 순서 (9급이 맨 아래)
+  GRADES.map((g, k) => [g, k]).reverse().forEach(([g, k]) => {
     const done = k <= lv.i, cur = k === lv.i, li = mk('li', 'gsrow' + (done ? ' done' : '') + (cur ? ' cur' : '') + (g.top ? ' top' + g.top : ''));
     const seal = mk('span', 'gsseal' + (g.s.length > 1 ? ' wide' : '')); seal.append(mk('b', '', g.s)); if (!g.top) seal.append(mk('small', '', '급'));
     const body = mk('span', 'gsbody'); body.append(mk('strong', '', g.g + ' · ' + g.t), mk('small', '', k === 0 ? '처음 시작' : '새 낱말 ' + fmt(g.n) + '개' + (g.magic ? ' + 숨은 낱말 ' + MAGIC_WORDS.length + '개 모두' : '')));
