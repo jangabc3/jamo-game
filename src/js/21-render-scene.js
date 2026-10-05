@@ -30,7 +30,7 @@ function draw(t) {
 
   // 조준
   if (G.playing && !G.tool && G.cur) {
-    const r = RAD[kindOf(G.cur)], x = clampAim(G.aimX);
+    const r = radOf(kindOf(G.cur)), x = clampAim(G.aimX);
     ctx.save(); ctx.setLineDash([2, 8]); ctx.lineCap = 'round'; ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(58,45,36,.28)';
     ctx.beginPath(); ctx.moveTo(x, DROPY + r + 6); ctx.lineTo(x, JB - 6); ctx.stroke(); ctx.restore();
     const bob = Math.sin(t / 260) * 2.5;

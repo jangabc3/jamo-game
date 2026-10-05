@@ -67,3 +67,11 @@
 .vsrow .vs { color: var(--muted); font-weight: 800; }
 .vsrow .win b { color: var(--seal); }
 .vsres { font-family: var(--head); font-weight: 800; font-size: 17px; }
+/* 좁은 폰(360px 안팎)에서도 점수가 겹치지 않게 */
+@media (max-width: 400px) {
+  .hud { gap: 5px; }
+  .pill b { font-size: clamp(24px, 8.4vw, 34px); }
+  .pill.best b { font-size: 16px; }
+  .next { width: 84px; }
+  .iconbtn { width: 40px; height: 40px; }
+}

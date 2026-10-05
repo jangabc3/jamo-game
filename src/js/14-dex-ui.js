@@ -9,7 +9,7 @@ const dexAll = () => Object.keys(dex).filter(w => WORDS.has(w));
 const initialOf = w => decompose(w[0])[0];
 const mastery = n => n >= 7 ? 3 : n >= 3 ? 2 : n >= 1 ? 1 : 0;
 const DOTS = '<i></i><i></i><i></i>';
-const HINT = { made: '카드를 누르면 뜻이 나와요', todo: '카드를 누르면 뜻과 힌트가 나와요', find: '아는 낱말을 쳐 보세요. 한 글자만 치면 그 글자로 시작하는 낱말이 나와요.' };
+const HINT = { made: '카드를 누르면 뜻이 나와요', todo: '카드를 누르면 초성이 보여요. 뜻은 힌트 버튼을 눌러야 나와요', magic: '카드를 눌러 보세요. 아직 못 찾은 낱말은 힌트를 볼 수 있어요', find: '아는 낱말을 쳐 보세요. 한 글자만 치면 그 글자로 시작하는 낱말이 나와요.' };
 
 function dexMsg(t) { const i = $('dexInfo'); i.classList.remove('has'); i.textContent = t; }
 function dexCard(...kids) { const info = $('dexInfo'); info.innerHTML = ''; info.classList.add('has'); restart(info, 'flash'); info.append(...kids); return info; }
@@ -24,11 +24,25 @@ function showMade(w) {
   dexCard(top, mk('p', 'soft', '뜻풀이를 준비 중이에요.'), look);
 }
 function showTodo(w) {
-  const top = mk('div', 'itop'), hint = mk('b', 'hintb', initials(w));
-  top.append(hint, mk('small', '', w.length + '글자 · 아직 못 만들었어요'));
-  const btn = mk('button', 'linkbtn peek', '낱말 보기'); btn.type = 'button';
-  btn.onclick = () => { hint.textContent = w; hint.classList.remove('hintb'); btn.remove(); };
-  dexCard(top, mk('p', '', '뜻: ' + (DEF[w] || '')), btn);
+  // 초성만 먼저 보여 주고, 뜻은 "뜻 힌트 보기"를 눌러야 나와요. 낱말 자체는 보여 주지 않아요.
+  const top = mk('div', 'itop');
+  top.append(mk('b', 'hintb', initials(w)), mk('small', '', w.length + '글자 · 아직 못 만들었어요'));
+  const btn = mk('button', 'hintbtn', '뜻 힌트 보기'); btn.type = 'button';
+  btn.onclick = () => btn.replaceWith(DEF[w] ? mk('p', '', '뜻: ' + DEF[w]) : mk('p', 'soft', '뜻풀이를 준비 중이에요.'));
+  dexCard(top, btn);
+}
+
+function showMagic(w) {
+  const m = MAGIC[w], n = magicSeen[w] || 0, top = mk('div', 'itop');
+  if (n) {
+    top.append(mk('b', '', w), mk('small', '', (m.kind === 'lore' ? m.who + ' · ' : '') + n + '번 만들었어요'));
+    dexCard(top, mk('p', '', m.kind === 'lore' ? '“' + m.quote + '”' : m.desc));
+    return;
+  }
+  top.append(mk('b', 'hintb', initials(w)), mk('small', '', '2글자 · 아직 못 찾았어요'));
+  const btn = mk('button', 'hintbtn', '힌트 보기'); btn.type = 'button';
+  btn.onclick = () => btn.replaceWith(mk('p', '', '힌트: ' + m.hint));
+  dexCard(top, btn);
 }
 
 function paintLevel() {
@@ -40,16 +54,19 @@ function paintLevel() {
   $('dexPct').textContent = '자주 쓰는 낱말 ' + n + ' / ' + TOTAL;
   $('tabMade').textContent = dexAll().length + '개';
   $('tabTodo').textContent = (TOTAL - n) + '개';
+  $('tabMagic').textContent = magicCount() + '/' + MAGIC_WORDS.length;
+  $('dexTabs').querySelector('[data-f="magic"]').classList.toggle('new', magicCount() > (+store.get('jamo-magic-viewed', '0') || 0));
 }
 
 function baseList() {
   if (dexTab === 'made') return dexAll();
   if (dexTab === 'todo') return CORE.filter(w => !dex[w]);
+  if (dexTab === 'magic') return MAGIC_WORDS.slice();
   const q = ($('dexQ').value || '').trim();
   return [...q].length === 1 ? ALL.filter(w => w[0] === q).slice(0, 80) : [];
 }
 function paintInits(base) {
-  const box = $('dexInits'); box.hidden = dexTab === 'find'; if (box.hidden) return;
+  const box = $('dexInits'); box.hidden = dexTab === 'find' || dexTab === 'magic'; if (box.hidden) return;
   const cnt = {}; for (const w of base) { const c = initialOf(w); cnt[c] = (cnt[c] || 0) + 1; }
   if (dexInit !== '전체' && !cnt[dexInit]) dexInit = '전체';
   box.innerHTML = '';
@@ -62,7 +79,15 @@ function paintInits(base) {
   const on = box.querySelector('[aria-pressed="true"]'); if (on) box.scrollLeft = Math.max(0, on.offsetLeft - 70);
 }
 
+function magicCardEl(w) {
+  const got = !!magicSeen[w];
+  const b = mk('button', 'dw mg' + (got ? ' got m3' : ' no') + (dexSel === w ? ' sel' : '')); b.type = 'button'; b.dataset.w = w;
+  b.appendChild(mk('span', 'dwt', got ? w : initials(w)));
+  b.setAttribute('aria-label', got ? '숨은 낱말 ' + w : '아직 못 찾은 숨은 낱말, 초성 ' + initials(w));
+  return b;
+}
 function cardEl(w) {
+  if (dexTab === 'magic') return magicCardEl(w);
   const got = !!dex[w], show = got || dexTab === 'find';
   const b = mk('button', 'dw' + (got ? ' got m' + mastery(dex[w]) : ' no') + (dexSel === w ? ' sel' : '')); b.type = 'button'; b.dataset.w = w;
   b.appendChild(mk('span', 'dwt', show ? w : initials(w)));
@@ -88,7 +113,7 @@ function renderDex() {
   if (dexTab === 'made') list.sort(dexSort === 'cnt' ? (a, b) => (dex[b] - dex[a]) || a.localeCompare(b, 'ko') : (a, b) => a.localeCompare(b, 'ko'));
   dexList = list; dexShown = 0;
   const grid = $('dexGrid'); grid.innerHTML = ''; grid.scrollTop = 0;
-  $('dexMeta').hidden = dexTab === 'find';
+  $('dexMeta').hidden = dexTab === 'find' || dexTab === 'magic';
   $('dexMetaT').textContent = (dexInit === '전체' ? '' : dexInit + ' · ') + list.length + '개';
   $('dexSort').hidden = dexTab !== 'made'; $('dexSort').textContent = dexSort === 'abc' ? '가나다순' : '많이 만든 순';
   if (!list.length && dexTab !== 'find') grid.appendChild(mk('p', 'dexempty', dexTab === 'made' ? '아직 만든 낱말이 없어요. 게임에서 낱말을 만들면 카드가 쌓여요.' : '자주 쓰는 낱말을 모두 모았어요!'));
@@ -104,7 +129,7 @@ $('dexGrid').addEventListener('click', e => {
   const b = e.target.closest('.dw'); if (!b) return;
   const w = b.dataset.w; dexSel = w;
   for (const x of $('dexGrid').querySelectorAll('.sel')) x.classList.remove('sel'); b.classList.add('sel');
-  if (dex[w] || dexTab === 'find') showMade(w); else showTodo(w);
+  if (dexTab === 'magic') showMagic(w); else if (dex[w] || dexTab === 'find') showMade(w); else showTodo(w);
 });
 $('dexInits').addEventListener('click', e => {
   const b = e.target.closest('.ichip'); if (!b) return;
@@ -112,7 +137,9 @@ $('dexInits').addEventListener('click', e => {
 });
 $('dexSort').onclick = () => { dexSort = dexSort === 'abc' ? 'cnt' : 'abc'; renderDex(); };
 for (const b of $('dexTabs').children) b.onclick = () => {
-  dexTab = b.dataset.f; dexInit = '전체'; dexSel = null; dexMsg(HINT[dexTab]); renderDex();
+  dexTab = b.dataset.f; dexInit = '전체'; dexSel = null; dexMsg(HINT[dexTab]);
+  if (dexTab === 'magic') store.set('jamo-magic-viewed', String(magicCount()));
+  renderDex();
   if (dexTab === 'find') $('dexQ').focus();
 };
 function dexSearch() {

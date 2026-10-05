@@ -12,7 +12,7 @@ function initWorld() {
   G.balls = []; G.queue = [];
 }
 function makeBall(ch, x, y, vx = 0, vy = 0) {
-  const k = kindOf(ch), r = RAD[k];
+  const k = kindOf(ch), r = radOf(k);
   const b = Bodies.circle(x, y, r, { restitution: .18, friction: .06, frictionAir: .004, density: .0012 });
   b.g = { ch, k, t: typeOf(ch), r, born: G.now, dead: false, ripe: 0, seed: Math.random() * 4000, grow: 1, sq: null };
   Body.setVelocity(b, { x: vx, y: vy });
@@ -106,7 +106,7 @@ function processQueue() {
     Composite.remove(G.engine.world, a); Composite.remove(G.engine.world, b);
     G.balls = G.balls.filter(z => z !== a && z !== b);
     if (res.kind === 'merge') {
-      const nb = makeBall(res.ch, x, Math.min(y, JB - RAD[kindOf(res.ch)] - 1), vx, vy - 1.5);
+      const nb = makeBall(res.ch, x, Math.min(y, JB - radOf(kindOf(res.ch)) - 1), vx, vy - 1.5);
       nb.g.pop = G.now;
       const pts = { cv: 2, final: 3, compound: 6, double: 6, same: 1 }[res.tag] || 1;
       addScore(pts, x, y, false);

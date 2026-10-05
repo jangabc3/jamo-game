@@ -6,8 +6,8 @@ function startGame(mode) {
   G.mode = mode; loadBest();
   initWorld();
   const base = { score: 0, combo: 0, lastPop: 0, wordsMade: 0, topWord: null, topPts: 0, ready: true, playing: true, over: false, overT: 0, paused: false,
-    items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, cont: 1, cm: 0, seen: {}, hintRare: false, target: null,
-    danger: DANGER0, lastDrop: G.now, nextGrow: G.now + 3500, slowUntil: 0, bump: null, banner: null, quietT: 0, recordHit: false, startBest: G.best, seq: [], dailyT: [], dailyDone: [], easy: (+store.get('jamo-plays', '0') || 0) < 3, lastWord: null, need: null, relay: 0, maxRelay: 0, relayFlash: 0, maxChain: 0, maxCombo: 0, chain: 0, chainT: 0, next2: null };
+    items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9, foundNow: [], cont: 1, cm: 0, seen: {}, hintRare: false, target: null,
+    danger: DANGER0, lastDrop: G.now, nextGrow: G.now + 3500, slowUntil: 0, bump: null, banner: null, quietT: 0, recordHit: false, startBest: G.best, seq: [], dailyT: [], dailyDone: [], easy: (+store.get('jamo-plays', '0') || 0) < 2, lastWord: null, need: null, relay: 0, maxRelay: 0, relayFlash: 0, maxChain: 0, maxCombo: 0, chain: 0, chainT: 0, next2: null };
   Object.assign(G, base);
   $('vig').className = ''; rkIdx = 0; updateRank(false);
   shownScore = 0; $('score').textContent = 0; $('scoreL').textContent = '점수';
@@ -66,6 +66,9 @@ function fillOver(rec, finished) {
   countUp($('oScore'), G.score, 900); $('oBest').textContent = daily ? G.dailyDone.filter(Boolean).length + '/' + G.dailyT.length : G.best;
   $('oBestL').textContent = daily ? '완성한 목표' : '최고 기록';
   countUp($('oWords'), G.wordsMade, 700); $('oChain').textContent = (G.maxChain >= 2 ? G.maxChain + '번' : '-'); $('oCombo').textContent = (G.maxCombo ? G.maxCombo + '번' : '-'); $('oTop').textContent = G.topWord || '-';
+  { const el = $('oMagic'), n = magicCount(), all = MAGIC_WORDS.length;
+    el.hidden = daily;
+    el.textContent = G.foundNow.length ? '숨은 낱말 발견: ' + G.foundNow.join(', ') + ' (' + n + '/' + all + ')' : n === 0 ? '게임 속에 숨은 낱말이 ' + all + '개 있어요. 도감에서 단서를 찾아보세요' : n < all ? '숨은 낱말 ' + n + '/' + all : '숨은 낱말을 모두 찾았어요!'; }
   $('oTopDef').textContent = G.topWord ? '+' + G.topPts + '점 · ' + (DEF[G.topWord] || '') : '';
   const grid = $('oGrid'); grid.hidden = !daily; grid.innerHTML = '';
   if (daily) {

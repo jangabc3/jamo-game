@@ -2,6 +2,9 @@
 /* ---------- 무대 ---------- */
 const W = 400, H = 548, JL = 22, JR = 378, JT = 112, JB = 528, DANGER0 = 150, DROPY = 66, INK = '#3A2D24';
 const RAD = { C: 15, V: 15, C2: 17.5, V2: 17.5, S: 23, F: 27, W: 24 };
+/* 급수가 오르면 공이 조금씩 커져요. 그릇이 더 빨리 차서 어려워져요. 1이면 그대로예요. */
+const BALLSCALE = [1, 1.04, 1.08, 1.12, 1.16];
+const radOf = k => RAD[k] * BALLSCALE[typeof rankIdxOf === 'function' ? rankIdxOf(G.score || 0) : 0];
 const FILL = { C: '#DB6F5C', C2: '#C24F3D', V: '#6C9CC4', V2: '#40709C', S: '#EDC565', F: '#7DB08C', W: '#FAF4E4' };
 const kindOf = ch => { const t = typeOf(ch); if (t === 'W') return 'W'; if (t === 'C') return CSPLIT[ch] ? 'C2' : 'C'; if (t === 'V') return VSPLIT[ch] ? 'V2' : 'V'; return t; };
 const MODES = {
@@ -17,7 +20,7 @@ const G = {
   engine: null, balls: [], queue: [], fx: { parts: [], rings: [], floats: [], fly: [] }, shake: { t: 0, m: 0 },
   mode: 'normal', score: 0, best: 0, startBest: 0, recordHit: false, combo: 0, lastPop: 0, wordsMade: 0, topWord: null, topPts: 0,
   cur: 'ㄱ', next: 'ㅏ', aimX: W / 2, ready: true, playing: false, over: false, overT: 0, warn: false, paused: false,
-  items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0,
+  items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9,
   cont: 1, scale: 1, dpr: 1, acc: 0, last: 0, now: 0, danger: DANGER0, lastDrop: 0, nextGrow: 0,
   slowUntil: 0, bump: null, banner: null, seq: [], dailyT: [], dailyDone: [], quietT: 0, target: null, deco: [],
 };

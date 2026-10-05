@@ -22,11 +22,12 @@ function step(t) {
     }
     let above = false;
     for (const b of G.balls) if (t - b.g.born > 1300 && b.position.y - b.g.r < G.danger) { above = true; break; }
+    if (t < (G.shieldUntil || 0)) above = false;   // 낱말 마법(얼음·엄마 …)의 보호막
     if (above && !G.warn) tutHook('warn');
     G.warn = above;
     { let top = 1e9; for (const b of G.balls) if (!b.g.dead && t - b.g.born > 1300) top = Math.min(top, b.position.y - b.g.r); const near = !above && top < G.danger + 70; $('vig').className = above ? 'warn' : near ? 'near' : ''; }
     G.overT = above ? G.overT + dt : 0;
-    if (G.overT > 2200) gameOver(false);
+    if (G.overT > 1900) gameOver(false);
     else if (G.mode === 'daily' && !G.cur && !G.seq.length) {
       let still = true; for (const b of G.balls) if (Math.hypot(b.velocity.x, b.velocity.y) > .35) { still = false; break; }
       G.quietT = still ? G.quietT + dt : 0;

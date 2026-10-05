@@ -62,7 +62,7 @@ function drawBanner(t) {
   const inK = Math.min(k / .12, 1), outK = k > .82 ? (1 - k) / .18 : 1;
   const sc = .7 + .3 * Math.min(easeBack(inK), 1.06);
   ctx.save(); ctx.translate(W / 2, 196 + (1 - easeBack(inK)) * 26); ctx.globalAlpha = Math.min(outK, 1); ctx.scale(sc, sc);
-  const cw = 316, lines = wrapDef(bn.def || '표준국어대사전에 실린 낱말'), ch = lines.length > 1 ? 100 : 82;
+  const cw = 316, lines = wrapDef(bn.def || ''), ch = lines.length > 1 ? 100 : 82;
   ctx.fillStyle = 'rgba(31,27,24,.2)'; ctx.fillRect(-cw / 2 + 4, -ch / 2 + 5, cw, ch);
   ctx.fillStyle = '#FAF4E4'; ctx.fillRect(-cw / 2, -ch / 2, cw, ch);
   ctx.lineWidth = 1.5; ctx.strokeStyle = INK; ctx.strokeRect(-cw / 2, -ch / 2, cw, ch);

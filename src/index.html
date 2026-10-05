@@ -10,6 +10,7 @@
 </head>
 <body>
 <div id="vig" aria-hidden="true"></div>
+<div class="magiccard" id="magicCard" role="status" aria-live="polite" hidden><div class="mseal" id="mcSeal">마법</div><div class="mtxt"><small id="mcTag"></small><strong id="mcWord"></strong><p id="mcNote"></p></div></div>
 <div class="app">
   <div class="hud">
     <div class="pill score"><small id="scoreL">점수</small><b id="score">0</b></div>
@@ -107,6 +108,7 @@
       <div><small>최고의 낱말</small><b id="oTop">-</b></div>
     </div>
     <p class="topdef" id="oTopDef"></p>
+    <p class="magicline" id="oMagic" hidden></p>
     <button class="btn" id="retryBtn" type="button">다시 하기</button>
     <button class="btn gold" id="shareBtn" type="button">친구에게 도전장 보내기</button>
     <div class="btns2">
@@ -132,13 +134,14 @@
       <button type="button" role="tab" data-f="made" aria-pressed="true"><b>만든 낱말</b><small id="tabMade">0</small></button>
       <button type="button" role="tab" data-f="todo" aria-pressed="false"><b>도전 낱말</b><small id="tabTodo">0</small></button>
       <button type="button" role="tab" data-f="find" aria-pressed="false"><b>낱말 찾기</b><small>사전</small></button>
+      <button type="button" role="tab" data-f="magic" aria-pressed="false"><b>숨은 낱말</b><small id="tabMagic">0</small></button>
     </div>
     <div class="dexinits" id="dexInits" role="group" aria-label="초성 고르기"></div>
     <div class="dexmeta" id="dexMeta"><span id="dexMetaT"></span><button class="linkbtn" id="dexSort" type="button">가나다순</button></div>
     <input id="dexQ" type="search" inputmode="text" autocomplete="off" placeholder="두 글자 낱말을 쳐 보세요" hidden>
     <div class="dexgrid" id="dexGrid"></div>
     <div class="dexinfo" id="dexInfo"></div>
-    <p class="note dexsrc">낱말과 뜻: 국립국어원 표준국어대사전·우리말샘 (CC BY-SA 2.0 KR) · 일부 뜻은 줄여 실음</p>
+    <p class="note dexsrc">낱말·뜻: 국립국어원 표준국어대사전·우리말샘 (CC BY-SA 2.0 KR) · 일부 뜻은 줄여 실음</p>
   </div>
 </div>
 <!--SCRIPTS-->

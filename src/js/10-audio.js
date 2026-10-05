@@ -63,6 +63,13 @@ function sfx(kind, v) {
   if (kind === 'item') { note(scaleNote(5), .16, .12, 0, { bell: true }); note(scaleNote(8), .28, .12, .08, { bell: true }); }
   if (kind === 'new') { [5, 7, 9].forEach((k, i) => note(scaleNote(k), .3, .11, i * .08, { bell: true })); }
   if (kind === 'magnet') { note(200, .6, .1, 0, { type: 'triangle', slide: 2.4 }); }
+  if (kind === 'magic') { [7, 9, 11, 14].forEach((k, i) => note(scaleNote(k), .42, .09, i * .07, { bell: true })); puff(.35, .035, 8000, 2500); }
+  if (kind === 'discover') { [5, 7, 9, 12, 14].forEach((k, i) => note(scaleNote(k), .5, .1, .18 + i * .08, { bell: true })); }
+  if (kind === 'quake') { note(70, .8, .22, 0, { type: 'triangle', slide: .5 }); puff(.7, .18, 500, 110); }
+  if (kind === 'wind') { puff(1.3, .1, 300, 2400); puff(1.0, .06, 600, 3200, .25); }
+  if (kind === 'ice') { [14, 12, 9, 7].forEach((k, i) => note(scaleNote(k), .5, .07, i * .08, { bell: true })); puff(.5, .04, 9000, 3500); }
+  if (kind === 'bolt') { puff(.28, .26, 7000, 250); note(90, .4, .2, .04, { type: 'triangle', slide: .3 }); }
+  if (kind === 'love') { [4, 6, 8, 11].forEach((k, i) => note(scaleNote(k), .6, .08, i * .12, { bell: true })); }
   if (kind === 'over') { [8, 6, 4, 1].forEach((k, i) => note(scaleNote(k), .5, .12, i * .16, { bell: true })); }
 }
 /* 배경음악: C-Am-F-G 네 마디를 도는 뮤직박스 */

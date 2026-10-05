@@ -2,7 +2,7 @@ const TOOL_HINT = { eraser: '지울 공을 눌러요', bomb: '폭탄을 터뜨�
 
 /* ---------- 입력 ---------- */
 function toWorld(e) { const b = cv.getBoundingClientRect(); return { x: (e.clientX - b.left) / b.width * W, y: (e.clientY - b.top) / b.height * H }; }
-const clampAim = x => { const r = RAD[kindOf(G.cur || 'ㄱ')]; return Math.max(JL + r + 2, Math.min(JR - r - 2, x)); };
+const clampAim = x => { const r = radOf(kindOf(G.cur || 'ㄱ')); return Math.max(JL + r + 2, Math.min(JR - r - 2, x)); };
 let pressing = false;
 cv.addEventListener('pointerdown', e => {
   if (!G.playing || G.paused) return;

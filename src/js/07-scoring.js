@@ -69,6 +69,7 @@ function wordPop(word, x, y, parts) {
   G.cm++; if (G.cm % 3 === 0) earnItem();
   updateMeter();
   checkRecord(x, y);
+  if (MAGIC[word]) setTimeout(() => castMagic(word, x, y), 0);   // 처리 중인 합치기가 끝난 뒤에 마법을 써요
 }
 function singlePop(b) {
   const { x, y } = b.position;
