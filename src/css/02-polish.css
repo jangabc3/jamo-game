@@ -1,0 +1,72 @@
+/* ===== 디자인 다듬기 (v15) ===== */
+.app { padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+/* 상단: 상자 대신 먹으로 쓴 점수판 */
+.hud { align-items: center; gap: 8px; }
+.pill { background: transparent; border: 0; border-radius: 0; padding: 0 2px; height: 52px; }
+.pill.score { border-bottom: 1.5px solid rgba(90,70,54,.55); padding-bottom: 3px; justify-content: flex-end; }
+.pill small { letter-spacing: .06em; font-size: 11px; margin-bottom: 1px; }
+.pill b { font-size: 34px; line-height: 1; letter-spacing: -.02em; }
+.pill.best { min-width: 52px; border-bottom: 1.5px solid rgba(90,70,54,.25); padding-bottom: 3px; justify-content: flex-end; }
+.pill.best b { font-size: 18px; color: var(--muted); }
+.next { width: 50px; height: 50px; border: 0; background: radial-gradient(circle at 50% 45%, rgba(250,244,228,.9) 0 62%, rgba(90,70,54,.14) 63% 100%); border-radius: 50%; }
+.next small { top: -9px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0; white-space: nowrap; }
+.next span { border: 1.5px solid var(--ink); }
+.iconbtn { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgba(90,70,54,.6); background: rgba(250,244,228,.75); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 0 rgba(90,70,54,.18); transition: transform .12s, background .12s; }
+/* 하단: 도구 모음 */
+.dock { gap: 7px; padding-top: 4px; }
+.item { height: 58px; border: 1px solid rgba(90,70,54,.45); border-radius: 15px; background: linear-gradient(180deg, rgba(250,244,228,.95), rgba(236,224,196,.85)); box-shadow: 0 2px 0 rgba(90,70,54,.22), inset 0 1px 0 rgba(255,255,255,.8); gap: 3px; transition: transform .12s, box-shadow .12s, background .15s; }
+.item:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 1px 3px rgba(90,70,54,.25); }
+.item span { font-size: 11.5px; color: var(--muted); letter-spacing: -.01em; }
+.item i { top: -6px; right: -5px; min-width: 17px; height: 17px; background: var(--ink); color: var(--paper); font-size: 10.5px; border: 1.5px solid var(--bg); box-sizing: content-box; }
+.item.on { background: linear-gradient(180deg, #F4D88A, #EDC565); border-color: #B58B1C; }
+.item.on span { color: var(--ink); }
+/* 족자: 원통형 축 */
+.card::before, .card::after { left: -12px; right: -12px; height: 18px; border-radius: 9px;
+  background:
+    radial-gradient(circle at 50% 50%, #E26A55 0 28%, #B8321F 29% 62%, #7E2013 63% 100%) left center / 20px 18px no-repeat,
+    radial-gradient(circle at 50% 50%, #E26A55 0 28%, #B8321F 29% 62%, #7E2013 63% 100%) right center / 20px 18px no-repeat,
+    linear-gradient(180deg, #D9A566 0%, #B07A44 38%, #8A5A33 72%, #5E3A20 100%);
+  box-shadow: 0 5px 8px -2px rgba(58,45,36,.38); }
+.card::before { top: -11px; } .card::after { bottom: -11px; }
+.card { border-left: 0; border-right: 0; background-image: linear-gradient(90deg, rgba(90,70,54,.07), transparent 7%, transparent 93%, rgba(90,70,54,.07)); }
+/* 버튼: 눌리는 맛 */
+.btn { border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 3px 8px rgba(126,32,19,.25); transition: transform .1s; }
+.btn.alt { box-shadow: none; border-color: rgba(90,70,54,.6); background: transparent; }
+.btn.gold { box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
+/* 결과: 상자 대신 장부 */
+.stats { gap: 0 14px; }
+.stats div { border: 0; border-bottom: 1px solid rgba(90,70,54,.28); border-radius: 0; padding: 8px 2px 6px; align-items: flex-start; text-align: left; }
+.stats div:first-child { grid-column: 1 / -1; flex-direction: row; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); }
+.stats div:first-child b { font-size: 40px; line-height: 1; }
+.stats div:last-child { grid-column: 1 / -1; }
+.stats small { font-size: 12px; }
+.stats b { font-size: 21px; max-width: 100%; }
+/* 출석: 상자 없이 도장만 */
+.daypanel { border: 0; border-top: 1px solid rgba(90,70,54,.3); border-radius: 0; padding: 10px 0 0; }
+.stamps i { border-color: rgba(90,70,54,.4); }
+.stamps i.on { box-shadow: inset 0 0 0 2px rgba(255,248,234,.35), 0 1px 3px rgba(126,32,19,.4); }
+.seg button { border-radius: 14px; border-color: rgba(90,70,54,.5); }
+.seg button[aria-pressed="true"] { box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+@media (prefers-reduced-motion: reduce) { .card, .logo, .seal, .rec { animation: none !important; } }
+.next { width: 86px; gap: 6px; display: flex; align-items: center; justify-content: flex-start; padding-left: 9px; box-sizing: border-box; border-radius: 26px; }
+.next span:first-of-type { width: 32px; height: 32px; flex: none; }
+.next #next2 { width: 24px; height: 24px; font-size: 14px; flex: none; opacity: .75; transition: transform .16s; border-width: 1.2px; }
+.iconbtn { flex: none; }
+.pill.best { min-width: 44px; }
+.next { background: rgba(250,244,228,.8) !important; box-shadow: inset 0 0 0 1px rgba(90,70,54,.35), 0 2px 0 rgba(90,70,54,.15); }
+#vig { position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0; transition: opacity .4s; box-shadow: inset 0 0 70px 18px rgba(184,50,31,.55); }
+#vig.near { opacity: .5; animation: vigP 1.6s ease-in-out infinite; }
+#vig.warn { opacity: 1; animation: vigP .7s ease-in-out infinite; }
+@keyframes vigP { 50% { filter: brightness(1.6); transform: scale(1.01); } }
+@media (prefers-reduced-motion: reduce) { #vig.near, #vig.warn { animation: none; } }
+.vsnote { margin: 0; padding: 8px 10px; border: 1.5px dashed var(--seal); border-radius: 10px; color: var(--seal); font-size: 13.5px; line-height: 1.4; }
+.vsnote[hidden] { display: none; }
+.vsrow { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; text-align: center; }
+.vsrow b { display: block; font-family: var(--head); font-size: 30px; font-variant-numeric: tabular-nums; }
+.vsrow small { color: var(--muted); font-size: 12px; }
+.vsrow .vs { color: var(--muted); font-weight: 800; }
+.vsrow .win b { color: var(--seal); }
+.vsres { font-family: var(--head); font-weight: 800; font-size: 17px; }
+.dexcard input { width: 100%; box-sizing: border-box; height: 44px; border: 1.5px solid rgba(90,70,54,.6); border-radius: 12px; background: #FFFDF6; padding: 0 14px; font-family: var(--body); font-size: 16px; color: var(--ink); user-select: text; -webkit-user-select: text; }
+.dexcard input[hidden] { display: none; }
+.dexcard input:focus-visible { outline: 2px solid var(--seal); outline-offset: 1px; }
