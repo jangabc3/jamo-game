@@ -14,13 +14,13 @@ const MODES = {
   inflate: ['공 팽창', '공이 시간이 지날수록 부풀어요.'],
   daily: ['같은 공 대결', ''],
 };
-const ITEMS = { eraser: '지우개', bomb: '폭탄', wild: '만능', magnet: '자석', shake: '흔들기' };
+const ITEMS = { eraser: '지우개', bomb: '폭죽', wild: '만능', scissors: '가위', shake: '흔들기' };
 
 const G = {
-  engine: null, balls: [], queue: [], fx: { parts: [], rings: [], floats: [], fly: [] }, shake: { t: 0, m: 0 },
+  engine: null, balls: [], queue: [], fx: { parts: [], rings: [], floats: [], fly: [], cuts: [], links: [] }, shake: { t: 0, m: 0 },
   mode: 'normal', score: 0, best: 0, startBest: 0, recordHit: false, combo: 0, lastPop: 0, wordsMade: 0, topWord: null, topPts: 0,
   cur: 'ㄱ', next: 'ㅏ', aimX: W / 2, ready: true, playing: false, over: false, overT: 0, warn: false, paused: false,
-  items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9,
+  items: { eraser: 1, bomb: 1, wild: 1, scissors: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9,
   cont: 1, scale: 1, dpr: 1, acc: 0, last: 0, now: 0, danger: DANGER0, lastDrop: 0, nextGrow: 0,
   slowUntil: 0, bump: null, banner: null, seq: [], dailyT: [], dailyDone: [], quietT: 0, target: null, deco: [],
 };

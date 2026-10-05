@@ -6,7 +6,7 @@
    오늘의 도전에서는 공정하게 겨루도록 마법 효과를 끄고 연출만 보여 줘요. */
 const MAGIC = {
   '폭탄': { kind: 'power', fx: 'bomb', desc: '가장 높이 쌓인 곳이 펑 터져요.', hint: '펑 하고 터지는 무기' },
-  '자석': { kind: 'power', fx: 'magnet', desc: '4.5초 동안 짝이 맞는 공끼리 끌려와요.', hint: '쇠붙이를 끌어당기는 물건' },
+  '자석': { kind: 'power', fx: 'magnet', desc: '짝이 맞는 공끼리 착 끌려와 붙어요.', hint: '쇠붙이를 끌어당기는 물건' },
   '지진': { kind: 'power', fx: 'quake', desc: '땅이 흔들려 공들이 튀어올라요.', hint: '땅이 흔들리는 자연재해' },
   '바람': { kind: 'power', fx: 'wind', desc: '공들이 한쪽으로 쓸려가요.', hint: '공기가 움직이는 것' },
   '번개': { kind: 'power', fx: 'bolt', desc: '가장 높은 공 둘이 번쩍 사라져요.', hint: '비구름에서 번쩍이는 빛' },
@@ -118,7 +118,22 @@ const FX = {
     const t = topBalls(1)[0];
     explode(t ? t.position.x : W / 2, Math.min(t ? t.position.y + 12 : (JT + JB) / 2, JB - 20));
   },
-  magnet() { G.magnetUntil = G.now + 4500; sfx('magnet'); float('자석 ON', W / 2, 262, 24, '#3F7F77', true); updateItems(); },
+  magnet() {
+    sfx('magnet');
+    const live = G.balls.filter(b => !b.g.dead), pairs = [];
+    for (let i = 0; i < live.length; i++) for (let j = i + 1; j < live.length; j++) {
+      const a = live[i], b = live[j], d = Math.hypot(b.position.x - a.position.x, b.position.y - a.position.y);
+      if (d < 280 && rule(a.g, b.g)) pairs.push([d, a, b]);
+    }
+    pairs.sort((p, q) => p[0] - q[0]); const used = new Set(); let n = 0;
+    for (const [d, a, b] of pairs) {
+      if (n >= 3 || used.has(a) || used.has(b)) continue; used.add(a); used.add(b); n++;
+      const nx = (b.position.x - a.position.x) / d, ny = (b.position.y - a.position.y) / d, sp = Math.min(11, 4 + d / 26);
+      Body.setVelocity(a, { x: nx * sp, y: ny * sp - 1.5 }); Body.setVelocity(b, { x: -nx * sp, y: -ny * sp - 1.5 });
+      G.fx.links.push({ a, b, t: G.now });
+    }
+    if (!n) float('붙을 짝이 없어요', W / 2, 262, 18, '#7C6B55', true);
+  },
   quake() {
     shakeIt(16); sfx('quake'); buzz([40, 30, 60, 30, 80]); shield(2600);
     for (const b of G.balls) Body.setVelocity(b, { x: (Math.random() - .5) * 7, y: -3 - Math.random() * 6 });

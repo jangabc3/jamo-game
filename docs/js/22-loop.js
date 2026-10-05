@@ -7,7 +7,6 @@ function step(t) {
     const slow = t < G.slowUntil ? .35 : 1;
     G.acc += dt * slow; let n = 0;
     while (G.acc >= 1000 / 60 && n < 4) {
-      if (t < G.magnetUntil) applyMagnet();
       applyTargetPull(); applyRipePull();
       Engine.update(G.engine, 1000 / 60); processQueue(); G.acc -= 1000 / 60; n++;
     }

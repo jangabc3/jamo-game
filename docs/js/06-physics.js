@@ -32,6 +32,7 @@ function onCollide(e) {
       if (b.g && !b.g.dead) b.g.sq = { t: G.now, a: amp };
     }
     if (!a.g || !b.g || a.g.dead || b.g.dead) continue;
+    if (a.g.snip && a.g.snip === b.g.snip && G.now < a.g.snipUntil) continue;   // 가위로 막 나뉜 조각끼리는 다시 붙지 않아요
     const res = rule(a.g, b.g);
     if (!res) continue;
     if (TAP_RARE && res.kind === 'word' && !CORESET.has(res.word)) {   // 흔하지 않은 낱말: 저절로 터지지 않고, 눌러서 확인
@@ -47,13 +48,12 @@ function onCollide(e) {
   }
 }
 function applyMagnet() {
-  const live = G.balls.filter(b => !b.g.dead); G.magPairs = [];
+  const live = G.balls.filter(b => !b.g.dead);
   for (let i = 0; i < live.length; i++) for (let j = i + 1; j < live.length; j++) {
     const a = live[i], b = live[j];
     const dx = b.position.x - a.position.x, dy = b.position.y - a.position.y, d = Math.hypot(dx, dy);
     if (d > 230 || d < 1) continue;
     if (!rule(a.g, b.g)) continue;
-    if (G.magPairs.length < 8) G.magPairs.push([a, b]);
     const f = 0.0026, nx = dx / d, ny = dy / d;
     Body.applyForce(a, a.position, { x: nx * f * a.mass, y: ny * f * a.mass });
     Body.applyForce(b, b.position, { x: -nx * f * b.mass, y: -ny * f * b.mass });

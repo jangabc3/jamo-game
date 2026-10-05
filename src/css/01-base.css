@@ -159,9 +159,10 @@ button:focus-visible { outline: 2px solid var(--seal); outline-offset: 2px; }
 .missions li .bar b { display: block; height: 100%; background: var(--f, #7DB08C); }
 .missions li.done { color: var(--muted); text-decoration: line-through; }
 .missions li em { font-style: normal; font-size: 11px; color: var(--muted); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
-.rec { position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-4deg); background: var(--seal); color: #FFF8EA; border-radius: 4px; padding: 3px 14px; font-family: var(--head); font-weight: 800; font-size: 17px; animation: recIn .5s cubic-bezier(.3,1.6,.5,1) .3s both; white-space: nowrap; box-shadow: inset 0 0 0 2px rgba(255,248,234,.35); }
+/* 신기록 띠: 두루마리 축 아래, 제목 위에 놓여요 (축에 가려지지 않게) */
+.rec { position: relative; align-self: center; margin: -8px 0 -4px; transform: rotate(-4deg); background: var(--seal); color: #FFF8EA; border-radius: 4px; padding: 3px 14px; font-family: var(--head); font-weight: 800; font-size: 17px; animation: recIn .5s cubic-bezier(.3,1.6,.5,1) .3s both; white-space: nowrap; box-shadow: inset 0 0 0 2px rgba(255,248,234,.35); }
 .rec[hidden] { display: none; }
-@keyframes recIn { from { transform: translateX(-50%) scale(2) rotate(-18deg); opacity: 0; } }
+@keyframes recIn { from { transform: scale(2) rotate(-18deg); opacity: 0; } }
 .dailygrid { display: flex; justify-content: center; gap: 6px; }
 .dailygrid[hidden] { display: none; }
 .dailygrid span { width: 34px; height: 34px; border-radius: 5px; border: 1.5px solid var(--line); display: grid; place-items: center; font-family: var(--glyph); font-weight: 700; font-size: 16px; background: var(--paper-lo); color: var(--muted); }
