@@ -29,9 +29,10 @@ $('startBtn').onclick = () => { if (!store.get('jamo-tut', '')) openTut(() => st
 $('retryBtn').onclick = () => startGame(G.mode);
 $('homeBtn').onclick = () => { bgmStop(); $('overOv').hidden = true; $('startOv').hidden = false; G.playing = false; selectMode(pickMode); refreshDailyBtn(); renderDex(); };
 $('dailyBtn').onclick = () => startGame('daily');
-$('contBtn').onclick = () => {
+$('contBtn').onclick = () => Ads.rewarded(() => {
   G.cont--;
   for (const b of [...G.balls]) if (b.position.y < G.danger + 110) { burst(b.position.x, b.position.y, 10, ['#FAF4E4', FILL[b.g.k]], 4); removeBall(b); }
   G.overT = 0; G.playing = true; G.over = false; G.ready = true; bgmStart();
   $('overOv').hidden = true; updateItems();
-};
+}, () => { $('oNote').hidden = false; $('oNote').textContent = '광고를 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'; });
+
