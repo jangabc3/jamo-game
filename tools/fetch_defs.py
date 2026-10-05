@@ -44,7 +44,9 @@ def fetch(url):
 BAD_CAT = {'인명', '지명', '문학', '책명', '작품', '인물'}          # 사람 이름·작품 이름 같은 뜻은 피해요
 
 def lookup(word, key):
-    q = urllib.parse.urlencode({'key': key, 'q': word, 'req_type': 'json', 'method': 'exact', 'num': 10})
+    args = {'key': key, 'q': word, 'req_type': 'json', 'method': 'exact', 'num': 10}
+    if source == 'stdict': args['type_search'] = 'search'          # 표준국어대사전 API는 이 값이 필요해요
+    q = urllib.parse.urlencode(args)
     raw = fetch(URL + '?' + q)
     if not raw.strip(): return None                                # 결과 없음
     data = json.loads(raw)
