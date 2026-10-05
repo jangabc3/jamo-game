@@ -50,7 +50,7 @@
       <button class="btn gold" id="dailyBtn" type="button" hidden>같은 공 대결</button>
       <button class="btn alt" id="dexBtn2" type="button" style="height:46px">도감 0/0</button>
     </div>
-    <div style="display:flex;gap:18px;justify-content:center"><button class="linkbtn" id="howBtn" type="button">게임 방법 보기</button><button class="linkbtn" id="guideBtn" type="button">합성표</button><button class="linkbtn" id="optBtn" type="button">설정</button></div>
+    <div style="display:flex;gap:18px;justify-content:center"><button class="linkbtn" id="howBtn" type="button">게임 방법 보기</button><button class="linkbtn" id="optBtn" type="button">설정</button></div>
   </div>
 </div>
 
@@ -69,18 +69,10 @@
       <button class="btn alt" id="setHome" type="button">처음으로</button>
     </div>
     <p class="note" style="margin:0">기록과 도감은 이 기기에만 저장돼요. 앱을 지우면 사라져요.</p>
-    <div style="display:flex;gap:18px;justify-content:center"><button class="linkbtn" id="setHow" type="button">게임 방법 보기</button><button class="linkbtn" id="setGuide" type="button">합성표</button><a class="linkbtn" href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a></div>
+    <div style="display:flex;gap:18px;justify-content:center"><button class="linkbtn" id="setHow" type="button">게임 방법 보기</button><a class="linkbtn" href="privacy.html" target="_blank" rel="noopener">개인정보처리방침</a></div>
   </div>
 </div>
 
-<div class="overlay" id="guideOv" hidden style="z-index:12">
-  <div class="card" role="dialog" aria-label="합성표">
-    <h2>합성표</h2>
-    <div id="guideRows"></div>
-    <p class="note" style="margin:0">낱말에 쓰이는 글자만 만들어져요. 닿았는데 안 합쳐지면 다른 짝을 찾아보세요.</p>
-    <button class="btn" id="guideClose" type="button">닫기</button>
-  </div>
-</div>
 
 <div class="overlay" id="tutOv" hidden>
   <div class="card tutcard" role="dialog" aria-label="게임 방법">
@@ -88,7 +80,7 @@
     <h2 id="tutH"></h2>
     <p id="tutP"></p>
     <div class="tutdots" id="tutDots"></div>
-    <div class="btns2"><button class="btn alt" id="tutPrev" type="button">이전</button><button class="btn" id="tutNext" type="button">다음</button></div>
+    <div class="tutbtns" id="tutBtns"><button class="btn alt" id="tutPrev" type="button">이전</button><button class="btn" id="tutNext" type="button">다음</button></div>
     <button class="linkbtn" id="tutSkip" type="button">건너뛰기</button>
   </div>
 </div>
@@ -105,7 +97,7 @@
       <div><small>터뜨린 낱말</small><b id="oWords">0</b></div>
       <div><small>최장 연쇄</small><b id="oChain">0</b></div>
       <div><small>최고 콤보</small><b id="oCombo">0</b></div>
-      <div><small>최고의 낱말</small><b id="oTop">-</b></div>
+      <div><small>최고 득점 낱말</small><b id="oTop">-</b></div>
     </div>
     <p class="topdef" id="oTopDef"></p>
     <p class="magicline" id="oMagic" hidden></p>

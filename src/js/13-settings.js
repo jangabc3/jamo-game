@@ -35,7 +35,7 @@ $('setResume').onclick = closeSettings;
 $('setHow').onclick = () => { const was = setWasPlaying; $('setOv').hidden = true; openTut(() => { setWasPlaying = was; $('setOv').hidden = false; }); };
 $('setRestart').onclick = () => { $('setOv').hidden = true; setWasPlaying = false; startGame(G.mode); };
 $('setHome').onclick = () => { $('setOv').hidden = true; setWasPlaying = false; G.paused = false; $('homeBtn').onclick(); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('guideOv').hidden) { $('guideOv').hidden = true; return; } if (e.key === 'Escape' && $('dexOv').hidden && $('tutOv').hidden && !$('startOv').hidden === false) { $('setOv').hidden ? openSettings() : closeSettings(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('dexOv').hidden && $('tutOv').hidden && !$('startOv').hidden === false) { $('setOv').hidden ? openSettings() : closeSettings(); } });
 // 안드로이드 뒤로가기: 게임 중이면 일시정지 창을 열어요
 try { history.replaceState({ jamo: 0 }, ''); } catch {}
 function pushGuard() { try { history.pushState({ jamo: 1 }, ''); } catch {} }

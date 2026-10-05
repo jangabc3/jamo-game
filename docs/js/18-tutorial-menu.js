@@ -15,7 +15,7 @@ function tutShow(back) {
   { const c = document.querySelector('.tutcard'); c.classList.toggle('back', !!back); restart(c, 'go'); }
   $('tutArt').innerHTML = t.art; $('tutH').textContent = t.h; $('tutP').textContent = t.p;
   $('tutDots').innerHTML = TUT.map((_, i) => '<i class="' + (i === tutI ? 'on' : '') + '"></i>').join('');
-  $('tutPrev').style.visibility = tutI ? 'visible' : 'hidden';
+  $('tutPrev').hidden = !tutI; $('tutBtns').classList.toggle('one', !tutI);
   $('tutNext').textContent = tutI === TUT.length - 1 ? '게임 시작' : '다음';
 }
 function openTut(then) { tutI = 0; tutThen = then; tutShow(); $('startOv').hidden = true; $('tutOv').hidden = false; $('tutNext').focus(); }

@@ -27,7 +27,7 @@ function finishText() {
   const m = G.mode;
   const base = `자모게임 ${MODES[m][0]}`;
   if (m === 'daily') return `자모게임 같은 공 대결\n내 점수 ${G.score}점 (${rankOf(G.score)})${VS.friend ? (G.score > VS.friend ? ' · 친구를 이겼어요!' : G.score < VS.friend ? ' · 아쉽게 졌어요' : ' · 비겼어요') : ''}\n같은 공으로 나를 이겨봐! ${vsLink()}`;
-  return `${base}\n${G.score}점 · ${rankOf(G.score)} · 낱말 ${G.wordsMade}개${G.maxRelay >= 2 ? ' · 끝말잇기 ' + G.maxRelay + '단어' : ''}${G.topWord ? ' · 최고의 단어 ' + G.topWord : ''}\n내 점수 깰 수 있어? ${location.origin + location.pathname}`;
+  return `${base}\n${G.score}점 · ${rankOf(G.score)} · 낱말 ${G.wordsMade}개${G.maxRelay >= 2 ? ' · 끝말잇기 ' + G.maxRelay + '단어' : ''}${G.topWord ? ' · 최고 득점 낱말 ' + G.topWord : ''}\n내 점수 깰 수 있어? ${location.origin + location.pathname}`;
 }
 function gameOver(finished) {
   $('vig').className = '';
@@ -69,7 +69,7 @@ function fillOver(rec, finished) {
   { const el = $('oMagic'), n = magicCount(), all = MAGIC_WORDS.length;
     el.hidden = daily;
     el.textContent = G.foundNow.length ? '숨은 낱말 발견: ' + G.foundNow.join(', ') + ' (' + n + '/' + all + ')' : n === 0 ? '게임 속에 숨은 낱말이 ' + all + '개 있어요. 도감에서 단서를 찾아보세요' : n < all ? '숨은 낱말 ' + n + '/' + all : '숨은 낱말을 모두 찾았어요!'; }
-  $('oTopDef').textContent = G.topWord ? '+' + G.topPts + '점 · ' + (DEF[G.topWord] || '') : '';
+  $('oTopDef').textContent = G.topWord ? '한 번에 가장 많은 점수를 준 낱말 · +' + G.topPts + '점' + (DEF[G.topWord] ? '\n' + DEF[G.topWord] : '') : '';
   const grid = $('oGrid'); grid.hidden = !daily; grid.innerHTML = '';
   if (daily) {
     const fr = VS.friend, me = G.score, best = vsBest();
