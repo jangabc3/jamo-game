@@ -1,0 +1,7 @@
+{
+  "appId": "com.jangabc3.jamo",
+  "appName": "자모게임",
+  "webDir": "docs",
+  "server": { "androidScheme": "https" },
+  "ios": { "contentInset": "never" }
+}

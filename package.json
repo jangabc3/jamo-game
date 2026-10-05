@@ -1,0 +1,12 @@
+{
+  "name": "jamo-game",
+  "private": true,
+  "version": "1.0.0",
+  "description": "자음과 모음을 떨어뜨려 우리말 낱말을 만드는 한글 물리 퍼즐 (스토어용 포장 설정)",
+  "scripts": {
+    "build": "python tools/build.py",
+    "sync": "python tools/build.py && npx cap sync",
+    "android": "npx cap open android",
+    "ios": "npx cap open ios"
+  }
+}

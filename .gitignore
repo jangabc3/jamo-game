@@ -3,3 +3,10 @@ __pycache__/
 .DS_Store
 node_modules/
 data/defs_cache.json
+node_modules/
+android/app/build/
+android/.gradle/
+android/local.properties
+ios/App/Pods/
+*.keystore
+*.jks
