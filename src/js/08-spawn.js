@@ -30,17 +30,23 @@ function newTarget() {
     G.target = { word: w, queue: [...piecesOf(w[0]), ...piecesOf(w[1])], idle: 0 };
   }
 }
+/* 난이도: 급수가 오를수록 필요한 글자를 덜 도와줘요. 숫자를 키우면 쉬워지고 줄이면 어려워져요.
+   steer  = 목표 낱말에 필요한 글자를 그대로 내줄 확률
+   helper = 그릇 안 글자와 어울리는 글자를 내줄 확률 */
+const DIFF = { steer: [0.80, 0.74, 0.68, 0.62, 0.56], helper: [0.40, 0.36, 0.32, 0.28, 0.24] };
+const rankIdxOf = sc => { let i = 0; while (i + 1 < RANKS.length && sc >= RANKS[i + 1][0]) i++; return i; };
+const diffAt = k => DIFF[k][rankIdxOf(G.score)];
 function genJamo() {
   if (G.mode === 'daily') return G.seq.length ? G.seq.shift() : null;
   if (!G.target) newTarget();
   const tg = G.target;
-  if (tg.queue.length && Math.random() < (G.easy ? 0.95 : 0.8)) return tg.queue.shift();
+  if (tg.queue.length && Math.random() < (G.easy ? 0.95 : diffAt('steer'))) return tg.queue.shift();
   if (!tg.queue.length && ++tg.idle > 7) newTarget();
   const live = G.balls.filter(b => !b.g.dead);
   const freeC = live.filter(b => b.g.t === 'C').length, freeV = live.filter(b => b.g.t === 'V').length;
   const syls = live.filter(b => b.g.t === 'S' || b.g.t === 'F');
   const r = Math.random();
-  if (syls.length && r < 0.4) {
+  if (syls.length && r < (G.easy ? 0.4 : diffAt('helper'))) {
     const s = syls[Math.floor(Math.random() * syls.length)].g;
     if (s.t === 'S' && Math.random() < 0.35) {
       const [l, v] = decompose(s.ch);
