@@ -39,6 +39,7 @@ function gameOver(finished) {
   const rec = !daily && G.recordHit;
   if (rec) confetti(120);
   fillOver(rec, finished);
+  if (!daily) Ads.afterGame(+store.get('jamo-plays', '0') || 0);
   setTimeout(() => { $('overOv').hidden = false; ($('retryBtn').hidden ? $('shareBtn') : $('retryBtn')).focus(); }, 650);
   updateItems(); refreshDailyBtn();
 }
@@ -87,7 +88,7 @@ function fillOver(rec, finished) {
       grid.append(row, res);
     }
   }
-  $('retryBtn').hidden = false; $('retryBtn').textContent = daily ? '다시 도전' : '다시 하기'; $('contBtn').hidden = daily || !G.cont;
+  $('retryBtn').hidden = false; $('retryBtn').textContent = daily ? '다시 도전' : '다시 하기'; $('contBtn').hidden = daily || !G.cont; $('contBtn').textContent = Ads.label();
   $('shareBtn').textContent = daily ? '친구에게 대결 신청' : '친구에게 도전장 보내기';
   $('oNote').textContent = daily ? '똑같은 공이 나오는 대결이에요. 같은 날이면 누구나 같은 순서예요.' : '위쪽 공 몇 개를 치우고 한 번 더 이어가요.';
   $('oNote').hidden = daily ? false : !G.cont;
