@@ -62,3 +62,4 @@
 .dexsrc { margin: 0; font-size: 11px; opacity: .75; }
 .lvbadge.pop { animation: pop .5s cubic-bezier(.3,1.6,.6,1); }
 @media (prefers-reduced-motion: reduce) { .dexinfo.flash, .lvbadge.pop, .dexinfo.has { animation: none; } .dexinits { scroll-behavior: auto; } }
+.dexinfo p.soft { color: var(--muted); } a.peek { text-decoration: underline; }

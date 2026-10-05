@@ -18,7 +18,10 @@ function mk(tag, cls, text) { const e = document.createElement(tag); if (cls) e.
 function showMade(w) {
   const top = mk('div', 'itop'), m = mk('span', 'mdots m' + mastery(dex[w] || 0)); m.innerHTML = DOTS;
   top.append(mk('b', '', w), m, mk('small', '', (dex[w] || 0) ? dex[w] + '번 만들었어요' : '아직 못 만들었어요'));
-  dexCard(top, mk('p', '', DEF[w] || '표준국어대사전에 실린 낱말'));
+  if (DEF[w]) { dexCard(top, mk('p', '', DEF[w])); return; }
+  const look = mk('a', 'linkbtn peek', '표준국어대사전에서 뜻 찾아보기'); look.target = '_blank'; look.rel = 'noopener noreferrer';
+  look.href = 'https://stdict.korean.go.kr/search/searchResult.do?searchKeyword=' + encodeURIComponent(w);
+  dexCard(top, mk('p', 'soft', '뜻풀이를 준비 중이에요.'), look);
 }
 function showTodo(w) {
   const top = mk('div', 'itop'), hint = mk('b', 'hintb', initials(w));
