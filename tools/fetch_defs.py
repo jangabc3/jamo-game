@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """뜻풀이가 비어 있는 낱말을 표준국어대사전 오픈 API로 채워요.
 
-준비: https://stdict.korean.go.kr/openapi/openApiInfo.do 에서 '오픈 API 사용 신청' 후 인증 키(32자리) 받기
+준비 (둘 중 하나, 키는 사이트마다 따로 받아요)
+  - 우리말샘(기본): https://opendict.korean.go.kr 로그인 → 오픈 API → 인증 키 신청. 하루 50,000건. 사용 URL 칸에는 배포 주소를 적어요
+  - 표준국어대사전: https://stdict.korean.go.kr/openapi/openApiInfo.do
 실행:
-    export STDICT_KEY=발급받은키
+    export STDICT_KEY=발급받은키        # 이름은 같고 사이트만 --source 로 고르면 돼요
+    python3 tools/fetch_defs.py --source stdict   # 표준국어대사전을 쓰려면 (기본은 opendict)
     python3 tools/fetch_defs.py            # 이어받기 가능. 중간에 멈춰도 data/defs_cache.json에 저장돼요
     python3 tools/fetch_defs.py --limit 200   # 먼저 200개만 시험
     python3 tools/fetch_defs.py --apply    # 받은 뜻을 data/dict.txt에 합치기
@@ -13,7 +16,9 @@
 import json, os, re, sys, time, urllib.parse, urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DICT, CACHE = os.path.join(ROOT, 'data/dict.txt'), os.path.join(ROOT, 'data/defs_cache.json')
-URL = 'https://stdict.korean.go.kr/api/search.do'
+SRC = {'opendict': 'https://opendict.korean.go.kr/api/search', 'stdict': 'https://stdict.korean.go.kr/api/search.do'}
+source = sys.argv[sys.argv.index('--source') + 1] if '--source' in sys.argv else 'opendict'
+URL = SRC[source]
 MAXLEN = 46          # 앱 용량을 위해 뜻을 이 길이로 줄여요
 
 def clean(t):
@@ -33,7 +38,7 @@ def lookup(word, key):
     if 'error' in data: raise RuntimeError(json.dumps(data['error'], ensure_ascii=False))
     items = (data.get('channel') or {}).get('item') or []
     if isinstance(items, dict): items = [items]
-    for pref in ('명사', ''):                                      # 명사 뜻을 먼저, 없으면 아무거나
+    for pref in ('명사', ''):                                      # 명사 뜻을 먼저, 없으면 아무거나 (용례는 쓰지 않아요: 출전 있는 용례는 별도 허락이 필요해요)
         for it in items:
             if re.sub(r'[\d\-^]', '', it.get('word', '')) != word: continue
             if pref and pref not in (it.get('pos') or ''): continue
