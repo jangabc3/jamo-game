@@ -9,7 +9,7 @@ P = lambda *a: os.path.join(ROOT, *a)
 rd = lambda p: open(p, encoding='utf8').read()
 def wr(p, t):
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    open(p, 'w', encoding='utf8').write(t)
+    open(p, 'w', encoding='utf8', newline='\n').write(t)
 
 SRC = P('src')
 css_files = sorted(os.listdir(P('src/css')))
