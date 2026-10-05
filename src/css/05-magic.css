@@ -33,15 +33,95 @@
 @keyframes mcOut { to { opacity: 0; transform: translate(-50%, -10px) scale(.96); } }
 @keyframes stamp { from { transform: rotate(-8deg) scale(1.7); opacity: 0; } 60% { opacity: 1; } to { transform: rotate(-8deg) scale(1); opacity: 1; } }
 
-/* 도감 '숨은 낱말' 탭 */
-.dextabs { grid-template-columns: repeat(4, 1fr); gap: 5px; }
-.dextabs button { padding: 0 2px; min-width: 0; position: relative; }
-.dextabs button b { font-size: 13.5px; letter-spacing: -.04em; white-space: nowrap; }
-.dextabs button.new::after { content: ''; position: absolute; top: 5px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 2px var(--paper); }
-@media (max-width: 340px) { .dextabs button b { font-size: 12.5px; } }
-.dw.mg.got::after { content: ''; position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 1.5px rgba(255,248,234,.85); }
-.dw.mg.no .dwt { font: 400 13px var(--body); letter-spacing: .06em; }
 .magicline { margin: 0; font-size: 13px; line-height: 1.4; color: var(--seal-dk); text-align: center; word-break: keep-all; }
 .magicline[hidden] { display: none; }
+/* (예전 도장 표시) */
 .dexinfo .seal-s { display: inline-block; vertical-align: 1px; margin-right: 4px; padding: 0 6px; border-radius: 9px; background: var(--seal); color: #FFF8EA; font-size: 11px; line-height: 17px; }
 @media (prefers-reduced-motion: reduce) { .magiccard.in, .magiccard.out, .magiccard.first .mseal { animation: none; } }
+
+/* ===== 도감 '숨은 낱말' 탭: 봉인된 편지 → 발견하면 봉인이 풀려요 ===== */
+.dexgrid.magicgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 9px; }
+.dw.mg { height: 74px; border-radius: 12px; }
+.dw.mg.sealed { background: linear-gradient(160deg, #4A3A2E, #33271F); border: 1.5px solid #241A13; color: rgba(250,244,228,.55); box-shadow: 0 3px 0 rgba(36,26,19,.55), inset 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 4px rgba(250,244,228,.05); overflow: hidden; }
+.dw.mg.sealed::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 52%; background: linear-gradient(160deg, rgba(255,255,255,.06), transparent); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.dw.mg.sealed .wax { position: relative; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--head); font-weight: 800; font-size: 14px; color: rgba(255,240,220,.92);
+  background: radial-gradient(circle at 35% 30%, #D2452F, #A52A18 60%, #7E2013); box-shadow: 0 0 0 2px rgba(126,32,19,.55), 0 2px 4px rgba(0,0,0,.4); margin-top: -2px; }
+.dw.mg.sealed .dwt { font: 400 11.5px var(--body); letter-spacing: .14em; color: rgba(250,244,228,.6); }
+.dw.mg.got { background: linear-gradient(170deg, #FCEDB4, #EAC051 70%, #D9A93A); border-color: #8A6410; box-shadow: 0 3px 0 rgba(120,88,20,.55), 0 0 0 2px rgba(237,197,101,.4), inset 0 1px 0 rgba(255,255,255,.8); }
+.dw.mg.got .dwt { font-family: var(--brush); font-weight: 400; font-size: 30px; color: #5A2A12; }
+.dw.mg.got.lore { background: linear-gradient(170deg, #E6F0E4, #B9D3BE 70%, #9CBFA4); border-color: #3F7F77; box-shadow: 0 3px 0 rgba(47,95,89,.45), inset 0 1px 0 rgba(255,255,255,.8); }
+.dw.mg.got.lore .dwt { color: #24524C; }
+.dw.mg.got::after { content: ''; position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #D2452F, #7E2013); box-shadow: 0 0 0 1.5px rgba(255,248,234,.85); }
+.dw.mg.unseal { animation: unsealCard .9s cubic-bezier(.3,1.4,.5,1) calc(var(--i, 0) * 120ms + .2s) both; }
+.dw.mg.unseal::before { content: ''; position: absolute; inset: -2px; border-radius: 13px; background: radial-gradient(circle, rgba(255,246,200,.95), rgba(255,226,140,0) 70%); animation: unsealGlow 1.1s ease-out calc(var(--i, 0) * 120ms + .2s) both; pointer-events: none; }
+.waxfly { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #D2452F, #7E2013); box-shadow: 0 0 0 2px rgba(126,32,19,.5); animation: waxFly .8s cubic-bezier(.3,.1,.6,1) calc(var(--i, 0) * 120ms + .15s) both; pointer-events: none; }
+@keyframes unsealCard { 0% { transform: rotateY(90deg) scale(.9); filter: brightness(.6); } 55% { transform: rotateY(-12deg) scale(1.08); filter: brightness(1.25); } 100% { transform: none; filter: none; } }
+@keyframes unsealGlow { 0% { opacity: 0; transform: scale(.6); } 35% { opacity: 1; } 100% { opacity: 0; transform: scale(1.5); } }
+@keyframes waxFly { 0% { transform: none; opacity: 1; } 30% { transform: scale(1.3); opacity: 1; } 100% { transform: translate(34px, -60px) rotate(220deg) scale(.4); opacity: 0; } }
+
+/* ===== 숨은 낱말 발견 연출 (처음 찾았을 때만) ===== */
+.discover { position: fixed; inset: 0; z-index: 9; pointer-events: none; display: grid; place-items: center; overflow: hidden; }
+.discover .dv-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(40,26,16,.25), rgba(30,18,10,.72)); animation: dvBg 2.5s ease-in-out both; }
+.discover .dv-rays { position: absolute; left: 50%; top: 50%; width: 112vmax; height: 112vmax; margin: -56vmax 0 0 -56vmax; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='120' fill='%23FFE08A' fill-opacity='.10'/%3E%3Ccircle cx='256' cy='256' r='70' fill='%23FFE08A' fill-opacity='.12'/%3E%3Cpath fill='%23FFE08A' fill-opacity='0.2' d='M256 256L366 256L365 272ZM256 256L359 294L353 308ZM256 256L340 327L329 338ZM256 256L311 351L296 358ZM256 256L275 364L259 366ZM256 256L237 364L221 360ZM256 256L201 351L188 342ZM256 256L172 327L162 314ZM256 256L153 294L148 278ZM256 256L146 256L147 240ZM256 256L153 218L159 204ZM256 256L172 185L183 174ZM256 256L201 161L216 154ZM256 256L237 148L253 146ZM256 256L275 148L291 152ZM256 256L311 161L324 170ZM256 256L340 185L350 198ZM256 256L359 218L364 234Z'/%3E%3Cpath fill='%23FFE08A' fill-opacity='0.15' d='M256 256L416 256L414 279ZM256 256L406 311L397 332ZM256 256L379 359L362 376ZM256 256L336 395L315 405ZM256 256L284 414L260 416ZM256 256L228 414L205 408ZM256 256L176 395L157 381ZM256 256L133 359L120 340ZM256 256L106 311L99 288ZM256 256L96 256L98 233ZM256 256L106 201L115 180ZM256 256L133 153L150 136ZM256 256L176 117L197 107ZM256 256L228 98L252 96ZM256 256L284 98L307 104ZM256 256L336 117L355 131ZM256 256L379 153L392 172ZM256 256L406 201L413 224Z'/%3E%3Cpath fill='%23FFE08A' fill-opacity='0.1' d='M256 256L471 256L469 287ZM256 256L458 330L445 358ZM256 256L421 394L399 417ZM256 256L364 442L335 456ZM256 256L293 468L262 471ZM256 256L219 468L188 460ZM256 256L149 442L122 424ZM256 256L91 394L73 369ZM256 256L54 330L45 299ZM256 256L41 256L43 225ZM256 256L54 182L67 154ZM256 256L91 118L113 95ZM256 256L148 70L177 56ZM256 256L219 44L250 41ZM256 256L293 44L324 52ZM256 256L364 70L390 88ZM256 256L421 118L439 143ZM256 256L458 182L467 213Z'/%3E%3Cpath fill='%23FFE08A' fill-opacity='0.06' d='M256 256L526 256L523 295ZM256 256L510 348L494 384ZM256 256L463 430L435 458ZM256 256L391 490L355 507ZM256 256L303 522L264 526ZM256 256L209 522L171 512ZM256 256L121 490L88 468ZM256 256L49 430L26 397ZM256 256L2 348L-8 310ZM256 256L-14 256L-11 217ZM256 256L2 164L18 128ZM256 256L49 82L77 54ZM256 256L121 22L157 5ZM256 256L209 -10L248 -14ZM256 256L303 -10L341 -0ZM256 256L391 22L424 44ZM256 256L463 82L486 115ZM256 256L510 164L520 202Z'/%3E%3Cpath fill='%23FFE08A' fill-opacity='0.03' d='M256 256L586 256L582 304ZM256 256L566 369L546 413ZM256 256L509 468L475 503ZM256 256L421 542L377 563ZM256 256L313 581L265 586ZM256 256L199 581L152 569ZM256 256L91 542L51 515ZM256 256L3 468L-25 429ZM256 256L-54 369L-67 322ZM256 256L-74 256L-70 208ZM256 256L-54 143L-34 99ZM256 256L3 44L37 9ZM256 256L91 -30L135 -51ZM256 256L199 -69L247 -74ZM256 256L313 -69L360 -57ZM256 256L421 -30L461 -3ZM256 256L509 44L537 83ZM256 256L566 143L579 190Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; animation: dvRays 2.5s linear both; }
+.discover.lore .dv-rays { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='120' fill='%23CFF2D9' fill-opacity='.10'/%3E%3Ccircle cx='256' cy='256' r='70' fill='%23CFF2D9' fill-opacity='.12'/%3E%3Cpath fill='%23CFF2D9' fill-opacity='0.2' d='M256 256L366 256L365 272ZM256 256L359 294L353 308ZM256 256L340 327L329 338ZM256 256L311 351L296 358ZM256 256L275 364L259 366ZM256 256L237 364L221 360ZM256 256L201 351L188 342ZM256 256L172 327L162 314ZM256 256L153 294L148 278ZM256 256L146 256L147 240ZM256 256L153 218L159 204ZM256 256L172 185L183 174ZM256 256L201 161L216 154ZM256 256L237 148L253 146ZM256 256L275 148L291 152ZM256 256L311 161L324 170ZM256 256L340 185L350 198ZM256 256L359 218L364 234Z'/%3E%3Cpath fill='%23CFF2D9' fill-opacity='0.15' d='M256 256L416 256L414 279ZM256 256L406 311L397 332ZM256 256L379 359L362 376ZM256 256L336 395L315 405ZM256 256L284 414L260 416ZM256 256L228 414L205 408ZM256 256L176 395L157 381ZM256 256L133 359L120 340ZM256 256L106 311L99 288ZM256 256L96 256L98 233ZM256 256L106 201L115 180ZM256 256L133 153L150 136ZM256 256L176 117L197 107ZM256 256L228 98L252 96ZM256 256L284 98L307 104ZM256 256L336 117L355 131ZM256 256L379 153L392 172ZM256 256L406 201L413 224Z'/%3E%3Cpath fill='%23CFF2D9' fill-opacity='0.1' d='M256 256L471 256L469 287ZM256 256L458 330L445 358ZM256 256L421 394L399 417ZM256 256L364 442L335 456ZM256 256L293 468L262 471ZM256 256L219 468L188 460ZM256 256L149 442L122 424ZM256 256L91 394L73 369ZM256 256L54 330L45 299ZM256 256L41 256L43 225ZM256 256L54 182L67 154ZM256 256L91 118L113 95ZM256 256L148 70L177 56ZM256 256L219 44L250 41ZM256 256L293 44L324 52ZM256 256L364 70L390 88ZM256 256L421 118L439 143ZM256 256L458 182L467 213Z'/%3E%3Cpath fill='%23CFF2D9' fill-opacity='0.06' d='M256 256L526 256L523 295ZM256 256L510 348L494 384ZM256 256L463 430L435 458ZM256 256L391 490L355 507ZM256 256L303 522L264 526ZM256 256L209 522L171 512ZM256 256L121 490L88 468ZM256 256L49 430L26 397ZM256 256L2 348L-8 310ZM256 256L-14 256L-11 217ZM256 256L2 164L18 128ZM256 256L49 82L77 54ZM256 256L121 22L157 5ZM256 256L209 -10L248 -14ZM256 256L303 -10L341 -0ZM256 256L391 22L424 44ZM256 256L463 82L486 115ZM256 256L510 164L520 202Z'/%3E%3Cpath fill='%23CFF2D9' fill-opacity='0.03' d='M256 256L586 256L582 304ZM256 256L566 369L546 413ZM256 256L509 468L475 503ZM256 256L421 542L377 563ZM256 256L313 581L265 586ZM256 256L199 581L152 569ZM256 256L91 542L51 515ZM256 256L3 468L-25 429ZM256 256L-54 369L-67 322ZM256 256L-74 256L-70 208ZM256 256L-54 143L-34 99ZM256 256L3 44L37 9ZM256 256L91 -30L135 -51ZM256 256L199 -69L247 -74ZM256 256L313 -69L360 -57ZM256 256L421 -30L461 -3ZM256 256L509 44L537 83ZM256 256L566 143L579 190Z'/%3E%3C/svg%3E"); }
+.discover .dv-ring { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 4px solid rgba(255,236,170,.9); animation: dvRing .8s cubic-bezier(.2,.8,.3,1) .55s both; }
+.discover .dv-card { position: relative; width: min(290px, calc(100vw - 48px)); box-sizing: border-box; padding: 18px 18px 16px; border-radius: 10px; text-align: center;
+  background: var(--paper); border: 1.5px solid #B58B1C; box-shadow: 0 18px 40px rgba(20,10,4,.5), 0 0 0 4px rgba(237,197,101,.55), inset 0 0 0 4px var(--paper), inset 0 0 0 5px rgba(181,139,28,.5);
+  animation: dvCard 2.5s cubic-bezier(.3,1.3,.5,1) both; }
+.discover .dv-tag { display: inline-block; font-size: 12px; letter-spacing: .12em; color: var(--seal-dk); padding: 3px 10px; border-radius: 12px; background: rgba(184,50,31,.09); border: 1px solid rgba(184,50,31,.25); animation: dvUp .4s ease-out .15s both; }
+.discover .dv-word { display: block; margin: 8px 0 4px; font-family: var(--brush); font-size: 74px; line-height: 1; color: #2B1A10; text-shadow: 0 2px 0 rgba(255,255,255,.5); animation: dvInk .55s cubic-bezier(.5,0,.3,1) .3s both; }
+.discover .dv-note { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--muted); word-break: keep-all; animation: dvUp .4s ease-out .95s both; }
+.discover .dv-seal { position: absolute; right: -12px; top: -16px; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-family: var(--head); font-weight: 800; font-size: 15px; color: #FFF8EA;
+  background: radial-gradient(circle at 35% 30%, #D2452F, var(--seal) 55%, #9A2716); border: 3px double rgba(255,248,234,.75); box-shadow: 0 0 0 2px var(--seal-dk), 0 4px 10px rgba(126,32,19,.45); animation: dvStamp .45s cubic-bezier(.3,1.7,.5,1) .55s both; }
+.discover.lore .dv-seal { background: radial-gradient(circle at 35% 30%, #5FA096, #3F7F77 55%, #24524C); box-shadow: 0 0 0 2px #24524C, 0 4px 10px rgba(36,82,76,.45); }
+.discover .dv-spark { position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; background: #FFE7A0; transform: rotate(45deg); box-shadow: 0 0 8px rgba(255,220,120,.9); animation: dvSpark .9s cubic-bezier(.1,.7,.3,1) .55s both; }
+.discover .dv-count { display: block; margin-top: 10px; font-family: var(--head); font-weight: 800; font-size: 12.5px; color: #8A6410; letter-spacing: .06em; animation: dvUp .4s ease-out 1.1s both; }
+.discover .dv-pips { display: flex; justify-content: center; gap: 4px; margin-top: 6px; animation: dvUp .4s ease-out 1.1s both; }
+.discover .dv-pips i { width: 8px; height: 8px; border-radius: 50%; background: rgba(90,70,54,.18); }
+.discover .dv-pips i.on { background: #D9A93A; box-shadow: 0 0 0 1px #8A6410; }
+.discover .dv-pips i.now { animation: dvPip .6s ease-out 1.3s both; }
+.discover.fly .dv-card { animation: dvFly .55s cubic-bezier(.5,0,.7,.4) both; }
+.discover.fly .dv-bg, .discover.fly .dv-rays { animation: dvOut .4s ease-in both; }
+@keyframes dvBg { 0% { opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes dvRays { 0% { opacity: 0; transform: rotate(0) scale(.6); } 20% { opacity: 1; transform: rotate(14deg) scale(1); } 100% { opacity: 1; transform: rotate(60deg) scale(1.04); } }
+@keyframes dvRing { 0% { opacity: 1; transform: scale(.4); border-width: 6px; } 100% { opacity: 0; transform: scale(3.2); border-width: 1px; } }
+@keyframes dvCard { 0% { opacity: 0; transform: scale(.3) rotate(-8deg); } 18% { opacity: 1; transform: scale(1.06) rotate(1deg); } 26% { transform: scale(1) rotate(0); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes dvInk { 0% { clip-path: inset(0 100% 0 0); opacity: .2; transform: translateX(-6px); } 100% { clip-path: inset(0 0 0 0); opacity: 1; transform: none; } }
+@keyframes dvUp { from { opacity: 0; transform: translateY(8px); } }
+@keyframes dvStamp { 0% { opacity: 0; transform: rotate(-14deg) scale(2.4); } 70% { opacity: 1; transform: rotate(-10deg) scale(.92); } 100% { opacity: 1; transform: rotate(-10deg) scale(1); } }
+@keyframes dvSpark { 0% { opacity: 0; transform: rotate(45deg) translate(0, 0) scale(.4); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(225deg) scale(.6); } }
+@keyframes dvPip { 0% { transform: scale(0); } 60% { transform: scale(1.8); box-shadow: 0 0 10px #FFD36A; } 100% { transform: scale(1); } }
+@keyframes dvFly { 0% { transform: none; opacity: 1; } 100% { transform: translate(var(--fx), var(--fy)) scale(.12) rotate(14deg); opacity: .2; } }
+@keyframes dvOut { to { opacity: 0; } }
+/* 도감 버튼: 새 발견이 있으면 빨간 점, 들어오면 통 튀어요 */
+#dexBtn { position: relative; }
+#dexBtn.ding::after { content: ''; position: absolute; top: 1px; right: 1px; width: 10px; height: 10px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 2px var(--paper); animation: newDot 1.6s ease-in-out infinite; }
+#dexBtn.bump { animation: dexBump .5s cubic-bezier(.3,1.8,.5,1); }
+@keyframes dexBump { 40% { transform: scale(1.28) rotate(-6deg); } }
+
+/* 마법을 쓸 때 낱말 자리에 찍히는 붓글씨 의성어 + 충격파 */
+.mfx.stampw { font-family: var(--brush); font-size: 54px; line-height: 1; color: var(--sc, #B8321F); text-shadow: 0 2px 0 rgba(255,250,236,.9), 0 0 12px rgba(255,250,236,.8); transform: translate(-50%, -50%); animation: stampW 1.1s cubic-bezier(.3,1.6,.5,1) both; white-space: nowrap; }
+.mfx.shock { width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 3px solid var(--sc, rgba(255,226,140,.95)); animation: shockA .6s cubic-bezier(.2,.8,.3,1) both; }
+.mfx.flake { top: -16px; width: 8px; height: 8px; background: rgba(255,255,255,.95); transform: rotate(45deg); box-shadow: 0 0 6px rgba(160,210,245,.95); animation: flakeFall var(--d, 2.8s) linear var(--dl, 0s) both; }
+.mfx.coin { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF0B0, #E8B93E 60%, #A87B18); box-shadow: 0 0 0 1.5px #8A6410; animation: coinA 1.2s cubic-bezier(.2,.6,.4,1) var(--dl, 0s) both; }
+@keyframes stampW { 0% { opacity: 0; transform: translate(-50%, -50%) scale(2.2) rotate(-10deg); } 25% { opacity: 1; transform: translate(-50%, -50%) scale(.95) rotate(-4deg); } 35% { transform: translate(-50%, -50%) scale(1) rotate(-4deg); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -80%) scale(1) rotate(-4deg); } }
+@keyframes shockA { 0% { opacity: 1; transform: scale(.3); } 100% { opacity: 0; transform: scale(5); border-width: 1px; } }
+@keyframes flakeFall { 0% { transform: translate3d(0, 0, 0) rotate(45deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate3d(var(--sx, 20px), 105vh, 0) rotate(405deg); opacity: .7; } }
+@keyframes coinA { 0% { transform: translate(0, 0) scale(.4); opacity: 0; } 15% { opacity: 1; } 45% { transform: translate(calc(var(--dx) * .7), var(--up)) scale(1); } 100% { transform: translate(var(--dx), 60px) scale(.9); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .dw.mg.unseal, .dw.mg.unseal::before, .waxfly, #dexBtn.bump, #dexBtn.ding::after { animation: none; } .waxfly { display: none; } }
+
+/* ===== 도감 급수 달성 도장 ===== */
+.gradeup { position: fixed; left: 50%; top: 34%; z-index: 8; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 10px; transform: translateX(-50%); animation: guOut 2.2s ease-in both; }
+.gradeup .gu-seal { position: relative; width: 104px; height: 104px; border-radius: 50%; display: flex; align-items: baseline; justify-content: center; padding-top: 22px; box-sizing: border-box; color: #FFF8EA;
+  background: radial-gradient(circle at 35% 30%, #D2452F, var(--seal) 55%, #9A2716); border: 5px double rgba(255,248,234,.75); box-shadow: 0 0 0 3px var(--seal-dk), 0 10px 24px rgba(126,32,19,.45); animation: guStamp .55s cubic-bezier(.3,1.7,.5,1) both; }
+.gradeup .gu-seal b { font-family: var(--head); font-weight: 800; font-size: 50px; line-height: 1; }
+.gradeup .gu-seal small { font-family: var(--head); font-weight: 700; font-size: 20px; margin-left: 2px; }
+.gradeup .gu-seal.wide b { font-size: 32px; padding-top: 8px; }
+.gradeup.top1 .gu-seal { background: radial-gradient(circle at 35% 30%, #4E6E8E, #2F4A66 60%, #1F3349); box-shadow: 0 0 0 3px #1C2C3D, 0 10px 24px rgba(28,44,61,.45); }
+.gradeup.top2 .gu-seal { background: radial-gradient(circle at 35% 30%, #F6DA82, #D9A93A 55%, #A87B18); color: #4A3208; box-shadow: 0 0 0 3px #8A6410, 0 0 24px rgba(237,197,101,.8); }
+.gradeup .gu-ring { position: absolute; left: 50%; top: 52px; width: 104px; height: 104px; margin: -52px 0 0 -52px; border-radius: 50%; border: 4px solid rgba(184,50,31,.6); animation: dvRing .7s cubic-bezier(.2,.8,.3,1) .25s both; }
+.gradeup .gu-txt { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 18px; border-radius: 12px; background: var(--paper); border: 1.5px solid rgba(90,70,54,.5); box-shadow: 0 8px 20px rgba(58,45,36,.3); animation: dvUp .35s ease-out .35s both; }
+.gradeup .gu-txt small { font-size: 11.5px; letter-spacing: .1em; color: var(--seal-dk); }
+.gradeup .gu-txt strong { font-family: var(--head); font-weight: 800; font-size: 19px; color: var(--ink); white-space: nowrap; }
+@keyframes guStamp { 0% { opacity: 0; transform: rotate(-16deg) scale(2.6); } 65% { opacity: 1; transform: rotate(-8deg) scale(.92); } 100% { opacity: 1; transform: rotate(-8deg) scale(1); } }
+@keyframes guOut { 0%, 82% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -14px); } }

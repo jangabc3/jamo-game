@@ -24,11 +24,12 @@ function earnItem() {
   float('+' + ITEMS[k], W / 2, 300, 26, '#3F7F77', true);
   const el = $(k); el.classList.remove('pulse'); void (el.offsetWidth); el.classList.add('pulse');
 }
-function showBanner(word, x, y) {
-  const isNew = recordWord(word) && CORESET.has(word);
-  G.banner = { word, def: DEF[word] || '', isNew, t: G.now };
-  if (isNew) { sfx('new'); float('도감 +1', x, y - 70, 20, '#B8321F', true); }
-  return isNew;
+// 낱말 카드: 작은 글씨를 공 위에 흩뿌리지 않고 카드 아래 한 줄(tags)로 모아요
+function showBanner(word, x, y, tags) {
+  const first = recordWord(word), core = CORESET.has(word);
+  G.banner = { word, def: DEF[word] || '', isNew: first && core, rare: first && !core, tags: tags || [], t: G.now };
+  if (first) sfx('new');
+  return first;
 }
 function wordPop(word, x, y, parts) {
   const common = CORESET.has(word);
@@ -38,6 +39,7 @@ function wordPop(word, x, y, parts) {
   if (G.mode === 'daily') { const i = G.dailyT.indexOf(word); if (i >= 0 && !G.dailyDone[i]) { G.dailyDone[i] = true; hit = true; } }
   else if (G.target && G.target.word === word) { hit = true; }
   const nSeen = G.seen[word] || 0; G.seen[word] = nSeen + 1;
+  const firstEver = !dex[word];   // 도감에 처음 올라가는 낱말
   const rep = Math.max(.25, 1 - .25 * nSeen);
   const base = common ? (30 + jamo * 6) * 1.5 * mult : (TIER[word] === 'B' ? 16 + jamo * 3 : TIER[word] === 'C' ? 8 + jamo * 2 : 5 + jamo * 1.5);
   let relayMul = 1;
@@ -49,18 +51,23 @@ function wordPop(word, x, y, parts) {
   G.lastWord = word; G.need = word[word.length - 1]; G.relayFlash = G.now;
   }
   const pts = Math.max(1, Math.round(base * rep * (hit ? 2 : 1) * relayMul));
-  if (nSeen) float('같은 낱말 −' + Math.round((1 - rep) * 100) + '%', x, y - 70, 13, '#7C6B55');
-  addScore(pts, x, y - 10, true);
+  const rareBonus = firstEver && !common && G.mode !== 'daily' ? 10 : 0;   // 처음 만든 희귀 낱말은 보너스
+  addScore(pts + rareBonus, x, y - 10, true);
   if (hit) float('목표 달성 ×2', W / 2, 262, 26, '#B8321F', true);
   if (G.relay >= 2) { float('끝말잇기 ×' + relayMul.toFixed(2).replace(/\.?0+$/, '') + ' · ' + G.relay + '단어', W / 2, 296, 20 + Math.min(G.relay, 6), '#8A5A00', true); sfx('chain', G.relay + 2); buzz([20, 20, 40]); }
   if (G.mode !== 'daily' && (hit || G.relay >= 1)) newTarget();
   G.wordsMade++;
-  if (pts > G.topPts) { G.topPts = pts; G.topWord = word; }
-  showBanner(word, x, y);
-  if (common) float('자주 쓰는 낱말 +50%', x, y - 52, 14, '#B8321F');
+  if (pts + rareBonus > G.topPts) { G.topPts = pts + rareBonus; G.topWord = word; }
+  const tags = [];
+  if (common) tags.push('기본 낱말 +50%');
+  if (rareBonus) tags.push('희귀 낱말 +' + rareBonus);
+  if (firstEver) tags.push('도감 +1');
+  if (nSeen) tags.push('같은 낱말 −' + Math.round((1 - rep) * 100) + '%');
+  showBanner(word, x, y, tags);
   if (common && G.combo > 1) float(['', '', '얼쑤! ×2', '좋다! ×3', '지화자! ×4', '얼씨구! ×5'][Math.min(G.combo, 5)] + (G.combo > 5 ? ' ×' + G.combo : ''), W / 2, 226, 30, '#B8321F', true);
   ring(x, y, 70, '#E8BC52'); ring(x, y, 40, '#FAF4E4');
-  burst(x, y, common ? 34 : 12, ['#DB6F5C', '#6C9CC4', '#EDC565', '#7DB08C', '#FAF4E4'], common ? 6.5 : 4);
+  if (rareBonus) { burst(x, y, 26, ['#EDC565', '#F6DA82', '#FAF4E4', '#D9A93A'], 5.5); ring(x, y, 90, '#D9A93A'); }
+  else burst(x, y, common ? 34 : 12, ['#DB6F5C', '#6C9CC4', '#EDC565', '#7DB08C', '#FAF4E4'], common ? 6.5 : 4);
   shakeIt(common ? 7 + Math.min(G.combo, 5) : 2);
   if (!reduced && common) { G.slowUntil = G.now + 420; G.bump = { t: G.now, x, y, a: .07 + Math.min(G.combo, 5) * .01 }; }
   sfx(common ? 'word' : 'rare', G.combo);

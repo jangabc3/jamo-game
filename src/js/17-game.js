@@ -7,7 +7,7 @@ function startGame(mode) {
   initWorld();
   const base = { score: 0, combo: 0, lastPop: 0, wordsMade: 0, topWord: null, topPts: 0, ready: true, playing: true, over: false, overT: 0, paused: false,
     items: { eraser: 1, bomb: 1, wild: 1, magnet: 1, shake: 1 }, tool: null, stash: null, magnetUntil: 0, shieldUntil: 0, loveN: 0, magicAt: -1e9, foundNow: [], cont: 1, cm: 0, seen: {}, hintRare: false, target: null,
-    danger: DANGER0, lastDrop: G.now, nextGrow: G.now + 3500, slowUntil: 0, bump: null, banner: null, quietT: 0, recordHit: false, startBest: G.best, seq: [], dailyT: [], dailyDone: [], easy: (+store.get('jamo-plays', '0') || 0) < 2, lastWord: null, need: null, relay: 0, maxRelay: 0, relayFlash: 0, maxChain: 0, maxCombo: 0, chain: 0, chainT: 0, next2: null };
+    danger: DANGER0, lastDrop: G.now, nextGrow: G.now + 3500, slowUntil: 0, freezeUntil: 0, bump: null, banner: null, quietT: 0, recordHit: false, startBest: G.best, seq: [], dailyT: [], dailyDone: [], easy: (+store.get('jamo-plays', '0') || 0) < 2, lastWord: null, need: null, relay: 0, maxRelay: 0, relayFlash: 0, maxChain: 0, maxCombo: 0, chain: 0, chainT: 0, next2: null };
   Object.assign(G, base);
   $('vig').className = ''; rkIdx = 0; updateRank(false);
   shownScore = 0; $('score').textContent = 0; $('scoreL').textContent = '점수';
@@ -50,9 +50,9 @@ function updateRank(celebrate) {
   const bar = $('rankbar'), nxt = RANKS[i + 1];
   $('rkName').textContent = RANKS[i][1];
   $('rkFill').style.width = (nxt ? Math.min(100, (sc - RANKS[i][0]) / (nxt[0] - RANKS[i][0]) * 100) : 100) + '%';
-  $('rkNext').textContent = nxt ? nxt[1] + ' ' + nxt[0] + '점' : '최고 급수';
+  $('rkNext').textContent = nxt ? nxt[1] + ' ' + nxt[0] + '점' : '최고 칭호';
   if (celebrate && i > rkIdx && G.playing) {
-    float('승급! ' + RANKS[i][1], W / 2, 270, 30, '#B8321F', true); confetti(60); sfx('new'); buzz([30, 30, 60]);
+    float('새 칭호! ' + RANKS[i][1], W / 2, 270, 28, '#B8321F', true); confetti(60); sfx('new'); buzz([30, 30, 60]);
     bar.classList.remove('up'); void bar.offsetWidth; bar.classList.add('up');
   }
   rkIdx = i;

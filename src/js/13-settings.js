@@ -30,6 +30,15 @@ function closeSettings() {
   setWasPlaying = false;
 }
 $('gear').onclick = () => { if ($('setOv').hidden) openSettings(); };
+// 앱 전환·화면 꺼짐·전화: 게임 중이면 일시정지 창을 열고 소리를 재워요. 돌아와도 "계속하기"를 눌러야 이어져요
+function onHide() {
+  if (G.playing && !G.paused && $('setOv').hidden && $('dexOv').hidden) openSettings();
+  try { if (AC && AC.state === 'running') AC.suspend(); } catch {}
+}
+function onShow() { try { if (AC && AC.state === 'suspended' && (sfxOn || musicOn)) AC.resume(); } catch {} G.last = 0; }
+document.addEventListener('visibilitychange', () => { document.hidden ? onHide() : onShow(); });
+window.addEventListener('pagehide', onHide);
+window.addEventListener('blur', () => { if (document.hidden) onHide(); });
 $('optBtn').onclick = openSettings;
 $('setResume').onclick = closeSettings;
 $('setHow').onclick = () => { const was = setWasPlaying; $('setOv').hidden = true; openTut(() => { setWasPlaying = was; $('setOv').hidden = false; }); };

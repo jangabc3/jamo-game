@@ -7,6 +7,7 @@ function draw(t) {
   if (sk < 280) { const k = (1 - sk / 280) * G.shake.m; sx = (Math.random() - .5) * k; sy = (Math.random() - .5) * k; }
   drawDeco(t);
   ctx.save(); ctx.translate(sx, sy);
+  if (G.wobble) { const k = t - G.wobble; if (k > 900 || reduced) G.wobble = 0; else { const a = .045 * Math.sin(k / 55) * Math.exp(-k / 260), cx = (JL + JR) / 2; ctx.translate(cx, JB); ctx.rotate(a); ctx.translate(-cx, -JB); } }
   if (G.bump) {
     const k = (t - G.bump.t) / 520;
     if (k >= 1) G.bump = null; else { const z = 1 + G.bump.a * Math.sin(Math.PI * Math.min(k * 1.4, 1)) * (1 - k * .5); ctx.translate(G.bump.x, G.bump.y); ctx.scale(z, z); ctx.translate(-G.bump.x, -G.bump.y); }
@@ -34,22 +35,26 @@ function draw(t) {
     ctx.save(); ctx.setLineDash([2, 8]); ctx.lineCap = 'round'; ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(58,45,36,.28)';
     ctx.beginPath(); ctx.moveTo(x, DROPY + r + 6); ctx.lineTo(x, JB - 6); ctx.stroke(); ctx.restore();
     const bob = Math.sin(t / 260) * 2.5;
-    drawBall(x, DROPY + bob, r, { ch: G.cur, k: kindOf(G.cur), t: typeOf(G.cur), seed: 0 }, 1, 1, G.ready ? 1 : .45, t);
+    const cb = G.bumpCur && !reduced ? Math.min((t - G.bumpCur) / 420, 1) : 1, cs = cb < 1 ? 1 + .6 * Math.sin(cb * Math.PI) * (1 - cb) : 1;
+    drawBall(x, DROPY + bob, r, { ch: G.cur, k: kindOf(G.cur), t: typeOf(G.cur), seed: 0 }, cs, cs, G.ready ? 1 : .45, t);
     if (G.mode === 'auto' && !G.paused) {
       const k = Math.min((t - G.lastDrop) / 1000, 1);
       ctx.save(); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#B8321F'; ctx.beginPath(); ctx.arc(x, DROPY + bob, r + 7, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * k); ctx.stroke(); ctx.restore();
     }
   }
 
-  // 힌트: 지금 공과 합쳐질 수 있는 공
-  if (hintOn && G.playing && !G.paused && !G.tool && G.cur && G.ready) {
+  // 조준 도우미: 지금 공과 합쳐질 수 있는 공에 테두리 (설정 > 힌트로 끌 수 있어요)
+  //   초록 점선 = 합쳐져 글자가 돼요 · 빨강 = 닿으면 낱말이 완성돼요(더 진하게 빛나요)
+  if (hintOn && G.playing && !G.paused && !G.tool && G.cur && G.ready && !(t < (G.freezeUntil || 0))) {
     const cur = { ch: G.cur, t: typeOf(G.cur) }, pu = .5 + .5 * Math.sin(t / 300);
-    ctx.save(); ctx.lineWidth = 2.5; ctx.setLineDash([5, 5]); ctx.lineDashOffset = -t / 60;
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.lineDashOffset = -t / 60;
     for (const b of G.balls) {
-      if (b.g.dead || b.g.pop) continue;
+      if (b.g.dead || (b.g.pop && t - b.g.pop < 300)) continue;
       const r = rule(cur, b.g); if (!r) continue;
-      ctx.globalAlpha = .35 + .35 * pu; ctx.strokeStyle = r.kind === 'word' ? '#B8321F' : '#3F7F77';
-      ctx.beginPath(); ctx.arc(b.position.x, b.position.y, b.g.r + 5, 0, Math.PI * 2); ctx.stroke();
+      const word = r.kind === 'word', x = b.position.x, y = b.position.y;
+      if (word) { ctx.save(); ctx.setLineDash([]); ctx.globalAlpha = .16 + .12 * pu; ctx.fillStyle = '#E8BC52'; ctx.beginPath(); ctx.arc(x, y, b.g.r + 9, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.lineWidth = word ? 3.2 : 2.6; ctx.globalAlpha = word ? .6 + .35 * pu : .45 + .3 * pu; ctx.strokeStyle = word ? '#B8321F' : '#3F7F77';
+      ctx.beginPath(); ctx.arc(x, y, b.g.r + 5, 0, Math.PI * 2); ctx.stroke();
     }
     ctx.restore();
   }
@@ -90,8 +95,24 @@ function draw(t) {
   ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
 
   // 자석 필드
+  // 자석: 회색으로 덮지 않고, 양쪽 벽이 빨강·파랑으로 은은하게 빛나고 끌리는 짝 사이에 자기장 선이 흘러요
   if (t < G.magnetUntil && G.playing) {
-    ctx.save(); ctx.globalAlpha = .08 + .05 * Math.sin(t / 120); ctx.fillStyle = '#2F5F8A'; ctx.fillRect(JL, JT, JR - JL, JB - JT); ctx.restore();
+    const left = G.magnetUntil - t, fade = Math.min(1, left / 500) * Math.min(1, (4500 - left) / 250), pu = .7 + .3 * Math.sin(t / 140);
+    ctx.save(); ctx.globalAlpha = fade;
+    let gr = ctx.createLinearGradient(JL, 0, JL + 46, 0); gr.addColorStop(0, `rgba(219,111,92,${.32 * pu})`); gr.addColorStop(1, 'rgba(219,111,92,0)');
+    ctx.fillStyle = gr; ctx.fillRect(JL, JT, 46, JB - JT);
+    gr = ctx.createLinearGradient(JR, 0, JR - 46, 0); gr.addColorStop(0, `rgba(108,156,196,${.34 * pu})`); gr.addColorStop(1, 'rgba(108,156,196,0)');
+    ctx.fillStyle = gr; ctx.fillRect(JR - 46, JT, 46, JB - JT);
+    ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+    for (const [a, b] of G.magPairs || []) {
+      if (a.g.dead || b.g.dead) continue;
+      const ax = a.position.x, ay = a.position.y, bx = b.position.x, by = b.position.y, mx = (ax + bx) / 2, my = (ay + by) / 2 - Math.min(40, Math.hypot(bx - ax, by - ay) * .25);
+      for (const [col, off] of [['#DB6F5C', 0], ['#6C9CC4', 7]]) {
+        ctx.setLineDash([7, 7]); ctx.lineDashOffset = -t / 28 + off; ctx.strokeStyle = col; ctx.globalAlpha = fade * .75;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
+      }
+    }
+    ctx.restore();
   }
 
   // 효과

@@ -65,7 +65,7 @@ function drawBanner(t) {
   const cw = 316, lines = wrapDef(bn.def || ''), ch = lines.length > 1 ? 100 : 82;
   ctx.fillStyle = 'rgba(31,27,24,.2)'; ctx.fillRect(-cw / 2 + 4, -ch / 2 + 5, cw, ch);
   ctx.fillStyle = '#FAF4E4'; ctx.fillRect(-cw / 2, -ch / 2, cw, ch);
-  ctx.lineWidth = 1.5; ctx.strokeStyle = INK; ctx.strokeRect(-cw / 2, -ch / 2, cw, ch);
+  ctx.lineWidth = bn.rare ? 2.5 : 1.5; ctx.strokeStyle = bn.rare ? '#B5861A' : INK; ctx.strokeRect(-cw / 2, -ch / 2, cw, ch);
   ctx.lineWidth = 1; ctx.strokeRect(-cw / 2 + 5, -ch / 2 + 5, cw - 10, ch - 10);
   // 붓으로 쓰듯 왼쪽에서 오른쪽으로 드러남
   ctx.font = `54px 'Nanum Brush Script', ${F_HEAD}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -79,12 +79,20 @@ function drawBanner(t) {
   ctx.save(); ctx.globalAlpha *= Math.min(Math.max((k - .2) / .08, 0), 1); ctx.translate(cw / 2 - 30, -ch / 2 + 30); ctx.rotate(.12);
   ctx.fillStyle = '#B8321F'; ctx.fillRect(-14, -14, 28, 28); ctx.fillStyle = '#FAF4E4'; ctx.font = `800 11px ${F_HEAD}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('낱', -6, -6); ctx.fillText('말', 6, -6); ctx.fillText('완', -6, 6); ctx.fillText('성', 6, 6); ctx.restore();
-  if (bn.isNew) {
+  // 카드 아래 한 줄: 기본 낱말 +50% · 도감 +1 같은 정보를 모아서 보여 줘요
+  if (bn.tags && bn.tags.length) {
+    ctx.save(); ctx.globalAlpha *= Math.min(Math.max((k - .22) / .1, 0), 1);
+    const txt = bn.tags.join('  ·  '); ctx.font = `700 12.5px ${F_BODY}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const pw = Math.min(cw - 10, ctx.measureText(txt).width + 26), py = ch / 2 + 17;
+    ctx.fillStyle = bn.rare ? '#8A6410' : '#3A2D24'; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(-pw / 2, py - 11, pw, 22, 11); else ctx.rect(-pw / 2, py - 11, pw, 22); ctx.fill();
+    ctx.fillStyle = '#FFF6DE'; ctx.fillText(txt, 0, py + .5, cw - 24); ctx.restore();
+  }
+  if (bn.isNew || bn.rare) {
     const st = Math.min(Math.max((k - .1) / .08, 0), 1);
     ctx.globalAlpha = Math.min(outK, 1) * st; ctx.translate(-cw / 2 + 12, -ch / 2 + 6); ctx.rotate(-.2); const z = 1 + (1 - st) * .9; ctx.scale(z, z);
-    ctx.fillStyle = '#B8321F'; ctx.fillRect(-22, -11, 44, 22);
+    ctx.fillStyle = bn.rare ? '#C8961E' : '#B8321F'; ctx.fillRect(-22, -11, 44, 22);
     ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(251,246,234,.6)'; ctx.strokeRect(-19.5, -8.5, 39, 17);
-    ctx.fillStyle = '#FAF4E4'; ctx.font = `800 13px ${F_HEAD}`; ctx.fillText('NEW', 0, 1);
+    ctx.fillStyle = '#FAF4E4'; ctx.font = `800 13px ${F_HEAD}`; ctx.fillText(bn.rare ? '희귀' : 'NEW', 0, 1);
   }
   ctx.restore();
 }

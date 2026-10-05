@@ -1,4 +1,4 @@
-const TOOL_HINT = { eraser: '지울 공을 눌러요', bomb: '폭탄을 터뜨릴 곳을 눌러요' };
+const TOOL_HINT = { eraser: '지울 공을 눌러요', bomb: '폭죽을 터뜨릴 곳을 눌러요' };
 
 /* ---------- 입력 ---------- */
 function toWorld(e) { const b = cv.getBoundingClientRect(); return { x: (e.clientX - b.left) / b.width * W, y: (e.clientY - b.top) / b.height * H }; }
@@ -9,7 +9,9 @@ cv.addEventListener('pointerdown', e => {
   audio();
   const p = toWorld(e);
   if (G.tool === 'eraser') {
-    const hit = Query.point(G.balls.filter(b => !b.g.dead), p)[0];
+    // 손가락은 정확하지 않아요: 공 안이 아니어도 가장자리 근처(16)면 가장 가까운 공을 지워요
+    let hit = Query.point(G.balls.filter(b => !b.g.dead), p)[0];
+    if (!hit) { let best = 1e9; for (const b of G.balls) { if (b.g.dead) continue; const d = Math.hypot(b.position.x - p.x, b.position.y - p.y) - b.g.r; if (d < 16 && d < best) { best = d; hit = b; } } }
     if (hit) {
       removeBall(hit); burst(hit.position.x, hit.position.y, 14, ['#FAF4E4', '#E9DDC3', FILL[hit.g.k]], 4); ring(hit.position.x, hit.position.y, hit.g.r + 10, '#FAF4E4');
       sfx('erase'); G.items.eraser--; G.tool = null; updateItems();
@@ -51,7 +53,7 @@ function explode(x, y) {
 }
 
 function drop() {
-  if (!G.ready || !G.playing || G.paused || !G.cur) return;
+  if (!G.ready || !G.playing || G.paused || !G.cur || G.now < (G.freezeUntil || 0)) return;
   const wasWild = G.cur === '★';
   const b = makeBall(G.cur, clampAim(G.aimX), DROPY, 0, 2);
   b.g.pop = G.now; G.lastDrop = G.now;
@@ -69,13 +71,22 @@ function useItem(k) {
   if (k === 'eraser' || k === 'bomb') { G.tool = G.tool === k ? null : k; }
   else if (k === 'wild') {
     if (G.cur === '★') { G.cur = G.stash; G.stash = null; G.items.wild++; }
-    else if (G.cur) { G.stash = G.cur; G.cur = '★'; G.items.wild--; sfx('item'); }
+    else if (G.cur) { G.stash = G.cur; G.cur = '★'; G.items.wild--; sfx('item'); wildFx(); }
   }
   else if (k === 'magnet') { G.items.magnet--; G.magnetUntil = G.now + 4500; sfx('magnet'); float('자석 ON', W / 2, 262, 26, '#3F7F77', true); }
   else if (k === 'shake') {
-    G.items.shake--; shakeIt(10); sfx('erase');
+    G.items.shake--; shakeIt(10); sfx('erase'); G.wobble = G.now; buzz([20, 30, 20, 30, 40]);
+    burst((JL + JR) / 2, JB - 8, 18, ['#E9DDC3', '#C8A24E', '#A89880'], 5); float('출렁!', W / 2, 262, 26, '#3F7F77', true);
     for (const b of G.balls) Body.setVelocity(b, { x: (Math.random() - .5) * 9, y: -4 - Math.random() * 8 });
   }
   updateItems();
 }
 for (const k in ITEMS) $(k).onclick = () => useItem(k);
+
+// 만능: 떨어뜨릴 자리에서 ★이 반짝이며 나타나요
+function wildFx() {
+  const x = clampAim(G.aimX);
+  ring(x, DROPY, 34, '#E8BC52'); ring(x, DROPY, 20, '#FAF4E4');
+  if (!reduced) for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; G.fx.parts.push({ x, y: DROPY, vx: Math.cos(a) * 3.2, vy: Math.sin(a) * 3.2 - 1, r: 3.2, c: i % 2 ? '#EDC565' : '#FAF4E4', t: G.now, life: 700, sq: false, star: true }); }
+  G.bumpCur = G.now;
+}

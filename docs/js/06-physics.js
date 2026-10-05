@@ -47,12 +47,13 @@ function onCollide(e) {
   }
 }
 function applyMagnet() {
-  const live = G.balls.filter(b => !b.g.dead);
+  const live = G.balls.filter(b => !b.g.dead); G.magPairs = [];
   for (let i = 0; i < live.length; i++) for (let j = i + 1; j < live.length; j++) {
     const a = live[i], b = live[j];
     const dx = b.position.x - a.position.x, dy = b.position.y - a.position.y, d = Math.hypot(dx, dy);
     if (d > 230 || d < 1) continue;
     if (!rule(a.g, b.g)) continue;
+    if (G.magPairs.length < 8) G.magPairs.push([a, b]);
     const f = 0.0026, nx = dx / d, ny = dy / d;
     Body.applyForce(a, a.position, { x: nx * f * a.mass, y: ny * f * a.mass });
     Body.applyForce(b, b.position, { x: -nx * f * b.mass, y: -ny * f * b.mass });

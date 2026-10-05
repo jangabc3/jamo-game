@@ -33,7 +33,7 @@
     </button>
     <button class="iconbtn" id="gear" type="button" aria-label="설정 및 일시정지"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M18.97 9.84 L21.46 10.38 L21.46 13.62 L18.97 14.16 L18.46 15.41 L19.84 17.54 L17.54 19.84 L15.41 18.46 L14.16 18.97 L13.62 21.46 L10.38 21.46 L9.84 18.97 L8.59 18.46 L6.46 19.84 L4.16 17.54 L5.54 15.41 L5.03 14.16 L2.54 13.62 L2.54 10.38 L5.03 9.84 L5.54 8.59 L4.16 6.46 L6.46 4.16 L8.59 5.54 L9.84 5.03 L10.38 2.54 L13.62 2.54 L14.16 5.03 L15.41 5.54 L17.54 4.16 L19.84 6.46 L18.46 8.59 Z"/><circle cx="12" cy="12" r="3.2"/></svg></button>
   </div>
-  <div class="rankbar" id="rankbar" aria-hidden="true"><span id="rkName">한글 새내기</span><div class="rk"><i id="rkFill"></i></div><em id="rkNext">100점</em></div>
+  <div class="rankbar" id="rankbar" aria-hidden="true"><span id="rkName">한글 새내기</span><div class="rk"><i id="rkFill"></i></div><em id="rkNext">서당 학동 300점</em></div>
   <div class="stage" id="stage"><canvas id="cv" aria-label="원고지 칸이 그려진 그릇. 좌우로 움직여 위치를 정하고 손을 떼면 글자 공이 떨어져요."></canvas></div>
   <div class="meter" id="meter" aria-live="polite"><span class="pips"><i></i><i></i><i></i></span><span id="meterT"></span></div>
   <div class="dock">
@@ -126,26 +126,32 @@
 <div class="overlay" id="dexOv" hidden>
   <div class="card dexcard" role="dialog" aria-label="낱말 도감">
     <div class="dexhead"><h2>낱말 도감</h2><button class="xbtn" id="dexClose" type="button" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <div class="dexlv">
-      <div class="lvbadge"><small>등급</small><b id="dexLv">1</b></div>
-      <div class="lvmain">
-        <strong id="dexLvName">낱말 새싹</strong>
-        <div class="dexbar"><i id="dexFill"></i></div>
-        <div class="dexcount"><span id="dexNum">0</span><span id="dexPct">0</span></div>
-      </div>
-    </div>
+    <button class="dexlv" id="dexLvBtn" type="button" aria-haspopup="dialog">
+      <span class="lvseal" id="dexSeal"><b id="dexLv">9</b><small id="dexLvU">급</small></span>
+      <span class="lvmain">
+        <span class="lvrow"><strong id="dexLvName">새싹</strong><span class="lvmore">급수표<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></span>
+        <span class="dexbar"><i id="dexFill"></i></span>
+        <span class="dexcount"><span id="dexNum"></span><span id="dexPct"></span></span>
+      </span>
+    </button>
     <div class="dextabs" id="dexTabs" role="tablist">
-      <button type="button" role="tab" data-f="made" aria-pressed="true"><b>만든 낱말</b><small id="tabMade">0</small></button>
-      <button type="button" role="tab" data-f="todo" aria-pressed="false"><b>도전 낱말</b><small id="tabTodo">0</small></button>
-      <button type="button" role="tab" data-f="find" aria-pressed="false"><b>낱말 찾기</b><small>사전</small></button>
+      <button type="button" role="tab" data-f="made" aria-pressed="true"><b>모은 낱말</b><small id="tabMade">0</small></button>
+      <button type="button" role="tab" data-f="todo" aria-pressed="false"><b>기본 낱말</b><small id="tabTodo">0</small></button>
       <button type="button" role="tab" data-f="magic" aria-pressed="false"><b>숨은 낱말</b><small id="tabMagic">0</small></button>
+      <button type="button" role="tab" data-f="find" aria-pressed="false"><b>사전</b><small id="tabFind">0</small></button>
     </div>
+    <p class="dexabout" id="dexAbout"></p>
     <div class="dexinits" id="dexInits" role="group" aria-label="초성 고르기"></div>
     <div class="dexmeta" id="dexMeta"><span id="dexMetaT"></span><button class="linkbtn" id="dexSort" type="button">가나다순</button></div>
     <input id="dexQ" type="search" inputmode="text" autocomplete="off" placeholder="두 글자 낱말을 쳐 보세요" hidden>
     <div class="dexgrid" id="dexGrid"></div>
     <div class="dexinfo" id="dexInfo"></div>
     <p class="note dexsrc">낱말·뜻: 국립국어원 표준국어대사전·우리말샘 (CC BY-SA 2.0 KR) · 일부 뜻은 줄여 실음</p>
+    <div class="gradesheet" id="gradeSheet" role="dialog" aria-label="급수표" hidden>
+      <div class="gshead"><h3>급수표</h3><button class="xbtn" id="gradeClose" type="button" aria-label="급수표 닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <p class="gsnote">새 낱말을 하나 만들 때마다 한 칸씩 올라가요. 같은 낱말은 한 번만 세요.</p>
+      <ol class="gslist" id="gradeList"></ol>
+    </div>
   </div>
 </div>
 <script src="vendor/matter.min.js"></script>

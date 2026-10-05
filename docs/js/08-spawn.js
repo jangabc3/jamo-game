@@ -26,7 +26,8 @@ function newTarget() {
   for (const s of syls) for (const p of CPARTNERS[s] || []) cands.push([s, p]);
   if (cands.length && Math.random() < 0.85) {
     const [have, need] = cands[Math.floor(Math.random() * cands.length)];
-    G.target = { word: WORDS.has(have + need) ? have + need : need + have, queue: piecesOf(need), idle: 0 };
+    // 기본 낱말 쪽 순서를 먼저 골라요 (기관 ↔ 관기, 안정 ↔ 정안 처럼 뒤집으면 낯선 낱말이 되는 경우가 있어요)
+    G.target = { word: CORESET.has(have + need) ? have + need : need + have, queue: piecesOf(need), idle: 0 };
   } else {
     const w = SIMPLE_WORDS[Math.floor(Math.random() * SIMPLE_WORDS.length)];
     G.target = { word: w, queue: [...piecesOf(w[0]), ...piecesOf(w[1])], idle: 0 };

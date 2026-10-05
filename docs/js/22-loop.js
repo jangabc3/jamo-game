@@ -3,7 +3,7 @@ function step(t) {
   G.now = t;
   const dt = G.last ? Math.min(t - G.last, 100) : 16.7; G.last = t;
   if (G.playing && !G.paused && PERF.cap > 1) { PERF.sum += dt; if (++PERF.n >= 90) { PERF.low = PERF.sum / PERF.n > 26 ? PERF.low + 1 : 0; PERF.n = 0; PERF.sum = 0; if (PERF.low >= 2) { PERF.cap = 1; resize(); } } }
-  if (G.engine && G.playing && !G.paused) {
+  if (G.engine && G.playing && !G.paused && !(t < (G.freezeUntil || 0))) {
     const slow = t < G.slowUntil ? .35 : 1;
     G.acc += dt * slow; let n = 0;
     while (G.acc >= 1000 / 60 && n < 4) {
@@ -22,7 +22,7 @@ function step(t) {
     }
     let above = false;
     for (const b of G.balls) if (t - b.g.born > 1300 && b.position.y - b.g.r < G.danger) { above = true; break; }
-    if (t < (G.shieldUntil || 0)) above = false;   // 낱말 마법(얼음·엄마 …)의 보호막
+    if (t < (G.shieldUntil || 0)) above = false;   // 낱말 마법(지진·엄마 …)의 보호막
     if (above && !G.warn) tutHook('warn');
     G.warn = above;
     { let top = 1e9; for (const b of G.balls) if (!b.g.dead && t - b.g.born > 1300) top = Math.min(top, b.position.y - b.g.r); const near = !above && top < G.danger + 70; $('vig').className = above ? 'warn' : near ? 'near' : ''; }
@@ -40,7 +40,7 @@ function step(t) {
     $('score').textContent = shownScore;
     if ((shownScore | 0) % 5 === 0 || shownScore === G.score) applyBg(shownScore);
   }
-  if (G.mode !== 'daily') $('best').textContent = G.best;
+  if (G.mode !== 'daily') $('best').textContent = G.playing ? Math.max(G.startBest || 0, shownScore) : G.best;
   draw(t);
   requestAnimationFrame(step);
 }
