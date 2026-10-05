@@ -128,8 +128,13 @@
         <div class="dexcount"><span id="dexNum">0</span><span id="dexPct">0</span></div>
       </div>
     </div>
-    <div class="dextabs" id="dexTabs"><button type="button" data-f="all" aria-pressed="true">자주 쓰는</button><button type="button" data-f="got" aria-pressed="false">내가 만든</button><button type="button" data-f="find" aria-pressed="false">낱말 찾기</button></div>
+    <div class="dextabs" id="dexTabs" role="tablist">
+      <button type="button" role="tab" data-f="made" aria-pressed="true"><b>만든 낱말</b><small id="tabMade">0</small></button>
+      <button type="button" role="tab" data-f="todo" aria-pressed="false"><b>도전 낱말</b><small id="tabTodo">0</small></button>
+      <button type="button" role="tab" data-f="find" aria-pressed="false"><b>낱말 찾기</b><small>사전</small></button>
+    </div>
     <div class="dexinits" id="dexInits" role="group" aria-label="초성 고르기"></div>
+    <div class="dexmeta" id="dexMeta"><span id="dexMetaT"></span><button class="linkbtn" id="dexSort" type="button">가나다순</button></div>
     <input id="dexQ" type="search" inputmode="text" autocomplete="off" placeholder="두 글자 낱말을 쳐 보세요" hidden>
     <div class="dexgrid" id="dexGrid"></div>
     <div class="dexinfo" id="dexInfo"></div>
