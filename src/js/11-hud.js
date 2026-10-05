@@ -40,7 +40,7 @@ function updateItems() {
   for (const k in ITEMS) {
     const el = $(k);
     el.querySelector('i').textContent = G.items[k];
-    el.disabled = !G.items[k] || !G.playing || G.paused;
+    el.disabled = (!G.items[k] && !(k === 'wild' && G.cur === '★')) || !G.playing || G.paused;
     el.classList.toggle('on', G.tool === k || (k === 'wild' && G.cur === '★') || (k === 'magnet' && G.now < G.magnetUntil));
   }
 }

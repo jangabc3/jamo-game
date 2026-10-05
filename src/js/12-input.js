@@ -66,7 +66,8 @@ function drop() {
 }
 
 function useItem(k) {
-  if (!G.playing || G.paused || !G.items[k]) return;
+  const cancelWild = k === 'wild' && G.cur === '★';   // 만능을 쓴 상태면 개수가 0이어도 다시 눌러 취소할 수 있어요
+  if (!G.playing || G.paused || (!G.items[k] && !cancelWild)) return;
   audio();
   if (k === 'eraser' || k === 'bomb') { G.tool = G.tool === k ? null : k; }
   else if (k === 'wild') {
