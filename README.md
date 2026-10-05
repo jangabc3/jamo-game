@@ -3,6 +3,13 @@
 자음과 모음을 떨어뜨려 글자를 만들고, 두 글자가 우리말 낱말이 되면 터지는 **한글 물리 퍼즐 게임**이에요.
 ㄱ + ㅏ = 가, 가 + ㅂ = 갑 … 한글이 만들어지는 원리를 직접 해 보면서 낱말을 모아요.
 
+<p align="center">
+  <img src="assets/screenshots/start.png" width="22%" alt="시작 화면">
+  <img src="assets/screenshots/word.png" width="22%" alt="낱말 완성">
+  <img src="assets/screenshots/play.png" width="22%" alt="게임 화면">
+  <img src="assets/screenshots/dex.png" width="22%" alt="낱말 도감">
+</p>
+
 **▶ 플레이: https://jangabc3.github.io/jamo-game/** (폰 브라우저에서 열고 "홈 화면에 추가"하면 앱처럼 써요)
 
 ## 특징
@@ -45,6 +52,7 @@ cd docs && python3 -m http.server 8000    # http://localhost:8000
 | `data/dict.txt` | `낱말|뜻|등급` 형식의 사전 데이터 |
 | `public/` | 글꼴(woff2), Matter.js, 아이콘, manifest, 개인정보처리방침 |
 | `tools/` | `build.py`(빌드), `fetch_defs.py`(뜻풀이 수집) |
+| `assets/` | README용 스크린샷 |
 | `docs/` | 빌드 결과(GitHub Pages가 이 폴더를 서비스) |
 
 스크립트는 번호 순서대로 불러오며, 같은 전역 범위를 공유해요.
