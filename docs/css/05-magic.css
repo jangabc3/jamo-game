@@ -1,0 +1,47 @@
+/* ===== 낱말 마법: 연출 레이어와 카드 ===== */
+#fxMagic { position: fixed; inset: 0; pointer-events: none; z-index: 6; overflow: hidden; }
+.mfx { position: absolute; will-change: transform, opacity; }
+.mfx.frost { inset: 0; box-shadow: inset 0 0 90px 26px rgba(110,175,225,.6); background: radial-gradient(ellipse at center, transparent 50%, rgba(190,225,245,.28)); animation: fxFade var(--d, 3.2s) ease-in-out both; }
+.mfx.hug { inset: 0; box-shadow: inset 0 0 80px 22px rgba(111,163,126,.55); background: radial-gradient(ellipse at center, transparent 55%, rgba(200,232,206,.22)); animation: fxFade var(--d, 7s) ease-in-out both; }
+.mfx.flash { inset: 0; background: #FFFDF2; animation: flashA .42s ease-out both; }
+.mfx.bolt { inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 0 6px rgba(255,236,160,.95)); animation: boltA .55s ease-out both; }
+.mfx.gust { height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent); box-shadow: 0 0 6px rgba(255,255,255,.7); animation-duration: .95s; animation-timing-function: ease-in; animation-fill-mode: both; animation-delay: var(--dl, 0s); }
+.mfx.gust.r { left: -70%; animation-name: gustR; }
+.mfx.gust.l { right: -70%; animation-name: gustL; }
+.mfx.petal { top: -24px; border-radius: 80% 0 80% 0; background: var(--pc, #F0B7B0); animation: petalFall var(--d, 3.4s) linear var(--dl, 0s) both; }
+.mfx.heart { bottom: -40px; width: var(--s, 24px); height: var(--s, 24px); fill: var(--hc, #DB6F5C); animation: heartUp var(--d, 2.6s) ease-out var(--dl, 0s) both; }
+@keyframes fxFade { 0% { opacity: 0; } 12% { opacity: 1; } 78% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes flashA { 0% { opacity: .92; } 100% { opacity: 0; } }
+@keyframes boltA { 0% { opacity: 1; } 30% { opacity: .35; } 45% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes gustR { from { transform: translateX(0); opacity: 0; } 15% { opacity: 1; } to { transform: translateX(260vw); opacity: 0; } }
+@keyframes gustL { from { transform: translateX(0); opacity: 0; } 15% { opacity: 1; } to { transform: translateX(-260vw); opacity: 0; } }
+@keyframes petalFall { 0% { transform: translate3d(0, 0, 0) rotate(0); opacity: 0; } 8% { opacity: 1; } 100% { transform: translate3d(var(--sx, 40px), 108vh, 0) rotate(var(--rot, 420deg)); opacity: .9; } }
+@keyframes heartUp { 0% { transform: translate3d(0, 0, 0) scale(.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate3d(var(--sx, 20px), -72vh, 0) scale(1.15); opacity: 0; } }
+
+.magiccard { position: fixed; left: 50%; top: 150px; z-index: 7; width: min(332px, calc(100vw - 32px)); box-sizing: border-box; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 11px 16px 11px 11px; border-radius: 6px; background: var(--paper); border: 1.5px solid rgba(90,70,54,.55); box-shadow: 0 10px 26px rgba(58,45,36,.35), inset 0 0 0 3px var(--paper), inset 0 0 0 4px rgba(90,70,54,.2); pointer-events: none; }
+.magiccard[hidden] { display: none; }
+.magiccard.in { animation: mcIn .5s cubic-bezier(.3, 1.4, .5, 1) both; }
+.magiccard.out { animation: mcOut .36s ease-in both; }
+.magiccard.first { border-color: #B58B1C; box-shadow: 0 10px 26px rgba(58,45,36,.35), 0 0 0 3px rgba(237,197,101,.6), inset 0 0 0 3px var(--paper), inset 0 0 0 4px rgba(181,139,28,.5); }
+.mseal { flex: none; width: 50px; height: 50px; border-radius: 50%; background: var(--seal); color: #FFF8EA; display: grid; place-items: center; border: 3px double rgba(255,248,234,.75); box-shadow: 0 0 0 2px var(--seal-dk), 0 3px 6px rgba(126,32,19,.35); transform: rotate(-8deg); font-family: var(--head); font-weight: 800; font-size: 15px; letter-spacing: -.02em; }
+.magiccard.first .mseal { animation: stamp .55s cubic-bezier(.3, 1.7, .5, 1) .15s both; }
+.mtxt { min-width: 0; display: flex; flex-direction: column; gap: 1px; text-align: left; }
+.mtxt small { font-size: 11.5px; color: var(--seal-dk); letter-spacing: .02em; }
+.mtxt strong { font-family: var(--head); font-weight: 800; font-size: 21px; line-height: 1.2; color: var(--ink); }
+.mtxt p { margin: 0; font-size: 13px; line-height: 1.38; color: var(--muted); word-break: keep-all; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@keyframes mcIn { from { opacity: 0; transform: translate(-50%, -18px) scale(.92); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
+@keyframes mcOut { to { opacity: 0; transform: translate(-50%, -10px) scale(.96); } }
+@keyframes stamp { from { transform: rotate(-8deg) scale(1.7); opacity: 0; } 60% { opacity: 1; } to { transform: rotate(-8deg) scale(1); opacity: 1; } }
+
+/* 도감 '숨은 낱말' 탭 */
+.dextabs { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.dextabs button { padding: 0 2px; min-width: 0; position: relative; }
+.dextabs button b { font-size: 13.5px; letter-spacing: -.04em; white-space: nowrap; }
+.dextabs button.new::after { content: ''; position: absolute; top: 5px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 2px var(--paper); }
+@media (max-width: 340px) { .dextabs button b { font-size: 12.5px; } }
+.dw.mg.got::after { content: ''; position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 1.5px rgba(255,248,234,.85); }
+.dw.mg.no .dwt { font: 400 13px var(--body); letter-spacing: .06em; }
+.magicline { margin: 0; font-size: 13px; line-height: 1.4; color: var(--seal-dk); text-align: center; word-break: keep-all; }
+.magicline[hidden] { display: none; }
+.dexinfo .seal-s { display: inline-block; vertical-align: 1px; margin-right: 4px; padding: 0 6px; border-radius: 9px; background: var(--seal); color: #FFF8EA; font-size: 11px; line-height: 17px; }
+@media (prefers-reduced-motion: reduce) { .magiccard.in, .magiccard.out, .magiccard.first .mseal { animation: none; } }
