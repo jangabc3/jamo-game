@@ -60,7 +60,7 @@ def pages():
     h = h.replace('<!--SCRIPTS-->', '<script src="vendor/matter.min.js"></script>\n' + '\n'.join(f'<script src="js/{f}"></script>' for f in js_files) +
         "\n<script>if('serviceWorker' in navigator && location.protocol.startsWith('http')) addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>")
     wr(os.path.join(out, 'index.html'), h)
-    files = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'vendor/matter.min.js']
+    files = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'privacy.html', 'vendor/matter.min.js']
     files += ['css/' + f for f in css_all] + ['js/' + f for f in js_files] + ['fonts/' + f for f in sorted(os.listdir(P('public/fonts')))]
     ver = hashlib.sha1(''.join(rd(os.path.join(out, f)) for f in files if f.endswith(('.css', '.js', '.html')) and f != 'vendor/matter.min.js').encode()).hexdigest()[:8]
     wr(os.path.join(out, 'sw.js'), f"""// 오프라인 실행용 서비스 워커. 빌드할 때마다 CACHE 이름이 자동으로 바뀌어요.
