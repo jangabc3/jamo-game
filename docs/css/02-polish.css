@@ -67,6 +67,3 @@
 .vsrow .vs { color: var(--muted); font-weight: 800; }
 .vsrow .win b { color: var(--seal); }
 .vsres { font-family: var(--head); font-weight: 800; font-size: 17px; }
-.dexcard input { width: 100%; box-sizing: border-box; height: 44px; border: 1.5px solid rgba(90,70,54,.6); border-radius: 12px; background: #FFFDF6; padding: 0 14px; font-family: var(--body); font-size: 16px; color: var(--ink); user-select: text; -webkit-user-select: text; }
-.dexcard input[hidden] { display: none; }
-.dexcard input:focus-visible { outline: 2px solid var(--seal); outline-offset: 1px; }

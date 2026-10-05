@@ -118,15 +118,22 @@
 </div>
 
 <div class="overlay" id="dexOv" hidden>
-  <div class="card dexcard">
-    <div class="dexhead"><h2>낱말 도감</h2><button class="btn alt" id="dexClose" type="button" style="height:38px;font-size:14px;padding:0 14px">닫기</button></div>
-    <div class="dexbar"><i id="dexFill"></i></div>
-    <div class="dexcount"><span id="dexNum">0 / 0</span><span id="dexPct">0%</span></div>
-    <div class="dexinfo" id="dexInfo">낱말을 누르면 뜻이 나와요. 터뜨린 낱말만 채워져요.</div>
+  <div class="card dexcard" role="dialog" aria-label="낱말 도감">
+    <div class="dexhead"><h2>낱말 도감</h2><button class="xbtn" id="dexClose" type="button" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="dexlv">
+      <div class="lvbadge"><small>등급</small><b id="dexLv">1</b></div>
+      <div class="lvmain">
+        <strong id="dexLvName">낱말 새싹</strong>
+        <div class="dexbar"><i id="dexFill"></i></div>
+        <div class="dexcount"><span id="dexNum">0</span><span id="dexPct">0</span></div>
+      </div>
+    </div>
     <div class="dextabs" id="dexTabs"><button type="button" data-f="all" aria-pressed="true">자주 쓰는</button><button type="button" data-f="got" aria-pressed="false">내가 만든</button><button type="button" data-f="find" aria-pressed="false">낱말 찾기</button></div>
-    <input id="dexQ" type="search" inputmode="text" autocomplete="off" placeholder="두 글자 낱말을 쳐 보세요 (예: 치킨, 닭장)" hidden>
+    <div class="dexinits" id="dexInits" role="group" aria-label="초성 고르기"></div>
+    <input id="dexQ" type="search" inputmode="text" autocomplete="off" placeholder="두 글자 낱말을 쳐 보세요" hidden>
     <div class="dexgrid" id="dexGrid"></div>
-    <p class="note" style="margin:0">낱말과 뜻: 국립국어원 표준국어대사전 (CC BY-SA 2.0 KR) · 일부 뜻은 줄여 실음</p>
+    <div class="dexinfo" id="dexInfo"></div>
+    <p class="note dexsrc">낱말과 뜻: 국립국어원 표준국어대사전 (CC BY-SA 2.0 KR) · 일부 뜻은 줄여 실음</p>
   </div>
 </div>
 <!--SCRIPTS-->

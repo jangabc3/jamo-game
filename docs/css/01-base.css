@@ -172,31 +172,10 @@ button:focus-visible { outline: 2px solid var(--seal); outline-offset: 2px; }
 .dailygrid span.on { background: var(--s); color: var(--ink); }
 
 /* 도감 */
-.dexcard { max-width: 380px; height: min(88vh, 660px); padding-bottom: 14px; }
-.dexhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.dexhead h2 { font-size: 24px; }
-.dexbar { height: 10px; border: 1.5px solid var(--line); border-radius: 6px; background: var(--paper-lo); overflow: hidden; }
-.dexbar i { display: block; height: 100%; width: 0; background: var(--seal); transition: width .6s cubic-bezier(.3,1.2,.6,1); }
-.dexcount { font-size: 14px; color: var(--muted); text-align: left; display: flex; justify-content: space-between; }
-.dexinfo { min-height: 52px; border: 1.5px dashed var(--ink); border-radius: 12px; padding: 6px 10px; font-size: 14px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); line-height: 1.35; }
-.dexinfo b { font-family: var(--glyph); font-weight: 700; font-size: 22px; color: var(--ink); margin-right: 8px; }
-.dexgrid { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; align-content: start; padding: 2px; -webkit-overflow-scrolling: touch; }
-.dw { border: 1.5px solid var(--line); border-radius: 5px; height: 38px; font-family: var(--glyph); font-weight: 700; font-size: 17px; background: var(--s); color: var(--ink); cursor: pointer; padding: 0; }
-.dw.no { background: transparent; color: #B3A38D; border-style: dashed; border-color: #A89880; font-size: 13px; font-weight: 400; font-family: var(--body); }
-.dw.sel { outline: 2px solid var(--seal); outline-offset: 1px; }
-.dw.fresh { animation: chipIn .5s cubic-bezier(.3,1.6,.6,1); }
 @keyframes chipIn { from { transform: scale(1.5) rotate(-8deg); opacity: 0; } }
-.dextabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.dextabs button { height: 34px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); font-family: var(--body); font-size: 14px; color: var(--ink); cursor: pointer; }
-.dextabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 @media (prefers-reduced-motion: reduce) { .logo, .seal, .card, .rec, .dw.fresh, .item.pulse { animation-duration: .01s !important; animation-delay: 0s !important; } }
 
 
-.dexinfo { flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; min-height: 74px; gap: 3px; padding: 8px 12px; overflow-wrap: anywhere; word-break: keep-all; }
-.dexinfo b { display: block; margin: 0; font-size: 24px; line-height: 1.15; }
-.dexgrid { scrollbar-width: thin; scrollbar-color: rgba(90,70,54,.45) transparent; padding-right: 6px; }
-.dexgrid::-webkit-scrollbar { width: 6px; } .dexgrid::-webkit-scrollbar-thumb { background: rgba(90,70,54,.4); border-radius: 3px; } .dexgrid::-webkit-scrollbar-track { background: transparent; }
-.dexgrid button { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .meter { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12.5px; color: var(--muted); height: 16px; margin-top: 2px; }
 .pips { display: inline-flex; gap: 4px; }
 .pips i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid rgba(90,70,54,.55); transition: background .25s, transform .25s; }
