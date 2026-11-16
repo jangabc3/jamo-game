@@ -33,9 +33,9 @@
 <details>
 <summary><b>🎬 실제 플레이 GIF 보기</b></summary>
 
-자모를 떨어뜨리고, 글자를 합치고, 낱말을 완성하는 과정입니다. 실제 플레이 중 연속 캡처한 화면으로 제작했습니다. 오디오는 포함하지 않습니다.
+자모를 떨어뜨리고, 글자를 합치고, 낱말을 완성하는 과정입니다. 실제 브라우저 화면을 연속 녹화한 15fps 미리보기입니다. 오디오는 포함하지 않습니다.
 
-<p align="center"><img src="assets/screenshots/play-demo.gif" width="344" alt="자모를 떨어뜨려 글자와 낱말을 완성하는 실제 플레이 GIF"></p>
+<p align="center"><img src="assets/screenshots/play-demo-smooth.gif" width="320" alt="자모를 떨어뜨려 글자와 낱말을 완성하는 실제 플레이 GIF"></p>
 
 </details>
 
@@ -43,11 +43,11 @@
 <summary><b>📖 게임 방법 · 사전 검색 · 숨은 낱말 화면</b></summary>
 
 <table>
-  <tr><th width="33%">단계별 게임 방법</th><th width="34%">낱말 사전 검색</th><th width="33%">숨은 낱말과 힌트</th></tr>
+  <tr><th width="33%">글자 조합 안내</th><th width="34%">낱말 사전 검색</th><th width="33%">숨은 낱말 · 힌트 펼치기</th></tr>
   <tr>
-    <td><a href="assets/screenshots/02-tutorial.png"><img src="assets/screenshots/02-tutorial.png" width="100%" alt="자음과 모음이 결합하는 원리를 설명하는 튜토리얼"></a></td>
+    <td><a href="assets/screenshots/02-how-to-play.png"><img src="assets/screenshots/02-how-to-play.png" width="100%" alt="자음과 모음이 결합하는 원리를 설명하는 튜토리얼"></a></td>
     <td><a href="assets/screenshots/05-dictionary.png"><img src="assets/screenshots/05-dictionary.png" width="100%" alt="가로 시작하는 낱말을 검색한 사전 화면"></a></td>
-    <td><a href="assets/screenshots/06-hidden.png"><img src="assets/screenshots/06-hidden.png" width="100%" alt="아직 발견하지 않은 숨은 낱말과 힌트를 확인하는 화면"></a></td>
+    <td><a href="assets/screenshots/06-magic-hint.png"><img src="assets/screenshots/06-magic-hint.png" width="100%" alt="아직 발견하지 않은 숨은 낱말 · 힌트 펼치기를 확인하는 화면"></a></td>
   </tr>
 </table>
 
