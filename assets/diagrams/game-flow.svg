@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="370" viewBox="0 0 760 370" role="img" aria-labelledby="title desc">
+<title id="title">자모게임 실행 흐름</title><desc id="desc">터치 입력, 물리 충돌, 한글 조합과 사전 판정, 연출과 기록 저장 순서로 처리합니다.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10" fill="#a26a48"/></marker></defs>
+<rect width="760" height="370" rx="20" fill="#faf7ef"/>
+<g stroke="#a26a48" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M334 95H418"/><path d="M581 150V219"/><path d="M426 275H342"/></g>
+<g fill="#fffdf7" stroke="#dfd3bf" stroke-width="2"><rect x="24" y="35" width="310" height="115" rx="14"/><rect x="426" y="35" width="310" height="115" rx="14"/><rect x="426" y="220" width="310" height="115" rx="14"/><rect x="24" y="220" width="310" height="115" rx="14"/></g>
+<g font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" text-anchor="middle">
+<g fill="#3a2d24" font-size="27" font-weight="700"><text x="179" y="83">1 · 입력</text><text x="581" y="83">2 · 물리·충돌</text><text x="581" y="268">3 · 합성·낱말 판정</text><text x="179" y="268">4 · 연출·기록</text></g>
+<g fill="#786958" font-size="21"><text x="179" y="119">터치·포인터 위치</text><text x="581" y="119">Matter.js 물리 엔진</text><text x="581" y="304">한글 조합 규칙·사전 조회</text><text x="179" y="304">점수·도감·최고 점수 저장</text></g></g></svg>

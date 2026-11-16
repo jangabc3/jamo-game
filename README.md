@@ -31,11 +31,11 @@
 현재 코드를 실행해 직접 조작한 화면입니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.
 
 <details>
-<summary><b>🎬 실제 플레이 GIF 보기</b></summary>
+<summary><b>🎬 실제 플레이 보기</b></summary>
 
-자모를 떨어뜨리고, 글자를 합치고, 낱말을 완성하는 과정입니다. 실제 브라우저 화면을 연속 녹화한 15fps 미리보기입니다. 오디오는 포함하지 않습니다.
+자모를 떨어뜨리고 글자를 합치는 실제 플레이 장면입니다. 소리 없는 미리보기이며, [원본 영상(MP4)](assets/screenshots/play-preview.mp4)도 확인할 수 있습니다.
 
-<p align="center"><img src="assets/screenshots/play-demo-smooth.gif" width="320" alt="자모를 떨어뜨려 글자와 낱말을 완성하는 실제 플레이 GIF"></p>
+<p align="center"><img src="assets/screenshots/play-preview.webp" width="320" alt="자모를 떨어뜨려 글자와 낱말을 완성하는 실제 플레이 애니메이션"></p>
 
 </details>
 
@@ -94,13 +94,7 @@
 | **프레임 지연 시 물리 처리** | 물리를 1/60초 단위로 갱신하고 프레임당 반복 횟수를 제한. 저성능 환경에서는 캔버스 해상도를 조정 | [게임 루프](src/js/22-loop.js) · [화면 크기 처리](src/js/23-main.js) |
 | **네트워크 없이 다시 실행** | 정적 파일을 사전 캐시하고 빌드 결과의 해시로 캐시 버전을 생성 | [서비스 워커](docs/sw.js) · [빌드 스크립트](tools/build.py) |
 
-```mermaid
-flowchart LR
-    A["터치·포인터 입력"] --> B["Matter.js 물리·충돌"]
-    B --> C["한글 조합·사전 판정"]
-    C --> D["합성·점수·완성 연출"]
-    D --> E["도감·최고 점수 저장"]
-```
+![터치 입력에서 물리 충돌, 한글 판정, 연출과 기록으로 이어지는 흐름](assets/diagrams/game-flow.svg)
 
 도감과 기록은 같은 브라우저에 저장됩니다. 기기 간 동기화는 지원하지 않으며 사이트 데이터를 지우면 기록도 초기화됩니다. 오프라인 실행은 최초 접속과 리소스 캐시가 완료된 이후에 가능합니다.
 
@@ -117,7 +111,7 @@ jamo-game/
 ├── public/              # 글꼴, Matter.js, PWA 아이콘
 ├── tools/               # 빌드·뜻풀이 수집 도구
 ├── docs/                # GitHub Pages 배포 결과
-└── assets/screenshots/  # README 실제 화면·플레이 GIF
+└── assets/screenshots/  # README 실제 화면·플레이 영상
 ```
 
 JavaScript 파일은 번호 순서로 로드하며 같은 전역 범위를 공유합니다. 원본 수정은 `src/`에서 진행하고 빌드로 `docs/`에 반영합니다.
@@ -126,14 +120,14 @@ JavaScript 파일은 번호 순서로 로드하며 같은 전역 범위를 공�
 
 ## 로컬 실행
 
-Python 3로 별도 패키지 설치 없이 실행할 수 있습니다.
+Python 3가 설치되어 있어야 합니다. 저장소를 내려받은 후, `docs` 폴더가 있는 저장소 루트에서 아래 명령을 실행합니다.
 
 ```bash
 # 현재 배포 결과 실행
 python -m http.server 8000 --directory docs
 ```
 
-브라우저에서 **http://localhost:8000**에 접속합니다.
+서버를 실행한 상태에서 브라우저로 [http://localhost:8000](http://localhost:8000)에 접속합니다. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다.
 
 <details>
 <summary><b>원본 수정 후 빌드하기</b></summary>
